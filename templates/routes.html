@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BusMate - Routes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}">
+</head>
+
+<body>
+
+<header class="topbar">
+    <div>
+        <h1>🚌 BusMate</h1>
+        <p>RIT Transport Management System</p>
+    </div>
+
+    <div class="top-actions">
+        <a href="/" class="nav-btn">Home</a>
+        <a href="/admin" class="nav-btn">Admin</a>
+    </div>
+</header>
+
+
+<main class="page-container">
+
+    <section class="page-heading">
+        <h2>🚌 Bus Routes</h2>
+        <p>View all available bus routes and morning boarding stops.</p>
+    </section>
+
+
+    <section class="search-card">
+
+        <h3>Search Bus Route</h3>
+
+        <div class="search-row">
+
+            <input
+                type="text"
+                id="busSearch"
+                placeholder="Enter bus number or route name"
+                autocomplete="off"
+            >
+
+            <button
+                type="button"
+                onclick="searchRoutes()">
+                Search
+            </button>
+
+            <button
+                type="button"
+                class="secondary-btn"
+                onclick="loadBuses()">
+                Show All
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <section class="routes-card">
+
+        <div class="section-title">
+            <h3>Available Routes</h3>
+
+            <span id="routeCount">
+                Loading...
+            </span>
+        </div>
+
+        <div id="loadingMessage" class="info-message">
+            Loading bus routes...
+        </div>
+
+        <div id="errorMessage"
+             class="error-message"
+             style="display:none;">
+        </div>
+
+        <div id="routesContainer"
+             class="routes-grid">
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+let allBuses = [];
+
+
+/* =========================================================
+   LOAD ALL BUSES
+   ========================================================= */
+
+async function loadBuses() {
+
+    const container =
+        document.getElementById("routesContainer");
+
+    const loading =
+        document.getElementById("loadingMessage");
+
+    const error =
+        document.getElementById("errorMessage");
+
+    const count =
+        document.getElementById("routeCount");
+
+    loading.style.display = "block";
+    error.style.display = "none";
+
+    container.innerHTML = "";
+
+    try {
+
+        const response =
+            await fetch("/api/buses");
+
+        const data =
+            await response.json();
+
+        loading.style.display = "none";
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message || "Unable to load routes."
+            );
+        }
+
+        allBuses = data.buses || [];
+
+        count.textContent =
+            `${allBuses.length} route(s)`;
+
+        displayRoutes(allBuses);
+
+    } catch (err) {
+
+        loading.style.display = "none";
+
+        error.textContent =
+            err.message ||
+            "Unable to connect to server.";
+
+        error.style.display = "block";
+    }
+}
+
+
+/* =========================================================
+   DISPLAY ROUTES
+   ========================================================= */
+
+function displayRoutes(buses) {
+
+    const container =
+        document.getElementById("routesContainer");
+
+    const count =
+        document.getElementById("routeCount");
+
+    container.innerHTML = "";
+
+    count.textContent =
+        `${buses.length} route(s)`;
+
+
+    if (buses.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">🚌</div>
+                <h3>No routes found</h3>
+                <p>
+                    No bus route matches your search.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    buses.forEach(bus => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "route-card";
+
+
+        card.innerHTML = `
+
+            <div class="route-icon">
+                🚌
+            </div>
+
+            <div class="route-info">
+
+                <h3>
+                    Bus ${escapeHtml(bus.bus_number)}
+                </h3>
+
+                <p>
+                    ${escapeHtml(bus.route_name)}
+                </p>
+
+            </div>
+
+            <button
+                class="view-stops-btn"
+                onclick="viewStops('${encodeURIComponent(bus.bus_number)}')">
+
+                View Stops →
+
+            </button>
+
+        `;
+
+        container.appendChild(card);
+
+    });
+}
+
+
+/* =========================================================
+   SEARCH ROUTES
+   ========================================================= */
+
+function searchRoutes() {
+
+    const input =
+        document.getElementById("busSearch");
+
+    const search =
+        input.value.trim().toLowerCase();
+
+
+    if (!search) {
+
+        displayRoutes(allBuses);
+
+        return;
+    }
+
+
+    const filtered =
+        allBuses.filter(bus => {
+
+            const busNumber =
+                String(bus.bus_number || "")
+                    .toLowerCase();
+
+            const routeName =
+                String(bus.route_name || "")
+                    .toLowerCase();
+
+            return (
+                busNumber.includes(search)
+                ||
+                routeName.includes(search)
+            );
+        });
+
+
+    displayRoutes(filtered);
+}
+
+
+/* =========================================================
+   VIEW STOPS
+   ========================================================= */
+
+function viewStops(busNumber) {
+
+    window.location.href =
+        "/stops?bus=" + busNumber;
+}
+
+
+/* =========================================================
+   ENTER KEY SEARCH
+   ========================================================= */
+
+document
+    .getElementById("busSearch")
+    .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+
+            searchRoutes();
+
+        }
+
+    });
+
+
+/* =========================================================
+   BASIC HTML ESCAPE
+   ========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+loadBuses();
+
+</script>
+
+</body>
+</html>

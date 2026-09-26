@@ -1,0 +1,3475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BusMate - Admin</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        /* =====================================================
+           LOGIN
+        ===================================================== */
+
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(
+                135deg,
+                #eaf3ff,
+                #f7fbff
+            );
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 5px;
+        }
+
+        .login-card h1 {
+            text-align: center;
+            margin: 0;
+            font-size: 30px;
+            color: #172554;
+        }
+
+        .login-card p {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            border-radius: 9px;
+            padding: 11px 17px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #475569;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #d97706;
+            color: white;
+        }
+
+        .btn-light {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .full-btn {
+            width: 100%;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 11px;
+            border-radius: 8px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* =====================================================
+           ADMIN DASHBOARD
+        ===================================================== */
+
+        .dashboard {
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: #172554;
+            color: white;
+            padding: 17px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .topbar-left h1 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .topbar-left span {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-name {
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .main {
+            max-width: 1250px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        .welcome {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .welcome h2 {
+            margin: 0 0 6px;
+            color: #172554;
+        }
+
+        .welcome p {
+            margin: 0;
+            color: #64748b;
+        }
+
+        /* =====================================================
+           MENU CARDS
+        ===================================================== */
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(210px, 1fr)
+            );
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .menu-card {
+            background: white;
+            padding: 20px;
+            border-radius: 13px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-2px);
+            border-color: #bfdbfe;
+        }
+
+        .menu-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .menu-card h3 {
+            margin: 0 0 5px;
+            color: #1e3a8a;
+        }
+
+        .menu-card p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           SECTIONS
+        ===================================================== */
+
+        .section {
+            display: none;
+            background: white;
+            padding: 22px;
+            margin-bottom: 22px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            color: #172554;
+        }
+
+        .section-header p {
+            margin: 4px 0 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(190px, 1fr)
+            );
+            gap: 15px;
+        }
+
+        .form-actions {
+            margin-top: 17px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #1e3a8a;
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid #dbeafe;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-blue {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .badge-green {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-orange {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 13px;
+            border-radius: 7px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #1e40af;
+        }
+
+        .danger-box {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            padding: 13px;
+            border-radius: 7px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #991b1b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        .admin-route-list,
+        .notice-admin-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .admin-route-card,
+        .admin-notice-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            padding: 16px;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .admin-route-card:hover,
+        .admin-notice-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(15,23,42,.08);
+        }
+
+        .admin-route-card .route-card-header,
+        .admin-notice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-route-card h3,
+        .admin-notice-card h3 {
+            margin: 0 0 5px;
+            color: #1d4ed8;
+        }
+
+        .admin-route-card .route-name {
+            margin: 0;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .admin-route-details {
+            margin-top: 12px;
+        }
+
+        .admin-stop-toggle {
+            width: 100%;
+            margin-top: 10px;
+            background: #16a34a;
+            color: #fff;
+        }
+
+        .admin-stop-panel {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 12px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .admin-stop-panel.show {
+            display: block;
+        }
+
+        .admin-stop-item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 9px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .admin-stop-item:last-child {
+            border-bottom: 0;
+        }
+
+        .notice-admin-card {
+            background: #fff;
+        }
+
+        .notice-admin-card p {
+            margin: 10px 0;
+            white-space: pre-wrap;
+            color: #475569;
+            line-height: 1.55;
+        }
+
+        .notice-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .notice-priority {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .priority-URGENT {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-IMPORTANT {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+
+        .priority-NORMAL {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        @media (max-width: 650px) {
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .topbar-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .main {
+                padding: 15px;
+            }
+
+            .section {
+                padding: 16px;
+            }
+
+            .login-card {
+                padding: 25px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}">
+
+<style>
+/* Admin menu content opens as a modal over the dashboard, not as a page jump. */
+body.admin-modal-open{overflow:hidden;}
+body.admin-modal-open:before{content:"";position:fixed;inset:0;background:rgba(5,25,55,.52);backdrop-filter:blur(3px);z-index:900;}
+.section.admin-modal-active{display:block;position:fixed;z-index:950;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1180px,94vw);max-height:88vh;overflow:auto;margin:0;border:1px solid #d9e7f4;box-shadow:0 28px 80px rgba(4,35,74,.28);}
+.section.admin-modal-active .section-close{display:inline-flex;align-items:center;gap:6px;}
+.section-close{background:#eef4fb;color:#163b68;border:1px solid #d7e5f3;padding:9px 13px;border-radius:10px;font-weight:800;cursor:pointer;}
+@media(max-width:650px){.section.admin-modal-active{width:96vw;max-height:90vh;top:50%;}.section.admin-modal-active .section-header{position:sticky;top:-25px;background:#fff;z-index:5;padding-top:2px;}}
+</style>
+</head>
+
+<body>
+
+{% if mode == "login" %}
+
+<!-- =========================================================
+     ADMIN LOGIN PAGE
+========================================================= -->
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <div class="logo">🚌</div>
+
+        <h1>BusMate</h1>
+
+        <p>
+            RIT Transport Management System
+            <br>
+            <strong>Admin Portal</strong>
+        </p>
+
+        <form id="adminLoginForm">
+
+            <div class="form-group">
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter admin username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter admin password"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="btn-primary full-btn"
+            >
+                Login as Admin
+            </button>
+
+        </form>
+
+        <div id="loginMessage" class="message"></div>
+
+        <div style="
+            margin-top:20px;
+            text-align:center;
+            font-size:12px;
+            color:#94a3b8;
+        ">
+            BusMate Admin Management
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+document
+    .getElementById("adminLoginForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const form = new FormData(this);
+
+        const message =
+            document.getElementById("loginMessage");
+
+        message.className = "message";
+        message.style.display = "block";
+        message.textContent = "Logging in...";
+
+        try {
+
+            const response = await fetch(
+                "/admin/login",
+                {
+                    method: "POST",
+                    body: form
+                }
+            );
+
+            const data = await response.json();
+
+            if (data.success) {
+
+                message.className =
+                    "message success";
+
+                message.textContent =
+                    "Login successful. Opening admin dashboard...";
+
+                window.location.href =
+                    data.redirect || "/admin";
+
+            } else {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    data.message ||
+                    "Invalid username or password.";
+
+            }
+
+        } catch (error) {
+
+            message.className =
+                "message error";
+
+            message.textContent =
+                "Unable to connect to server.";
+
+        }
+
+    });
+
+</script>
+
+
+{% else %}
+
+<!-- =========================================================
+     ADMIN DASHBOARD
+========================================================= -->
+
+<div class="dashboard">
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <div class="topbar-left portal-brand">
+
+            <div class="portal-logo-wrap">
+                <img src="{{ url_for('static', filename='rit-logo.png') }}" alt="RIT - Rajalakshmi Institute of Technology" class="portal-logo">
+            </div>
+
+            <div class="portal-brand-text">
+                <h1>BUSMATE ADMIN</h1>
+                <span>RIT Transport Management System</span>
+            </div>
+
+        </div>
+
+        <div class="topbar-right portal-actions">
+
+            <span class="role-chip">👤 Administrator</span>
+
+            <button
+                class="btn-danger logout-btn"
+                onclick="logoutAdmin()"
+            >
+                🚪 Logout
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <main class="main">
+
+        <!-- WELCOME -->
+
+        <div class="welcome">
+
+            <h2>
+                Admin Dashboard
+            </h2>
+
+            <p>
+                Manage bus routes, return buses,
+                late buses, exam time buses and important notices.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             ADMIN MENU
+        ================================================== -->
+
+        <div class="menu-grid">
+
+            <div
+                class="menu-card"
+                data-section="routesSection"
+                data-loader="loadRoutes"
+                onclick="showSection('routesSection'); loadRoutes();"
+            >
+
+                <div class="menu-icon">
+                    🚌
+                </div>
+
+                <h3>
+                    View Routes
+                </h3>
+
+                <p>
+                    View all available bus routes
+                    and morning boarding points.
+                </p>
+
+            </div>
+
+
+            <div
+                class="menu-card"
+                data-section="transportManagementSection"
+                data-loader="loadTransportManagement"
+                onclick="showSection('transportManagementSection'); loadTransportManagement();"
+            >
+                <div class="menu-icon">⚙️</div>
+                <h3>Manage Buses & Boarding Points</h3>
+                <p>Add or remove buses and boarding points.</p>
+            </div>
+
+
+            <div
+                class="menu-card"
+                data-section="lateBusSection"
+                data-loader="loadLateBuses"
+                onclick="showSection('lateBusSection'); loadLateBuses();"
+            >
+
+                <div class="menu-icon">
+                    🕒
+                </div>
+
+                <h3>
+                    Late-Bus Management
+                </h3>
+
+                <p>
+                    Add or update buses departing
+                    at 5:00 PM or later.
+                </p>
+
+            </div>
+
+
+            <div
+                class="menu-card"
+                data-section="dailyReturnSection"
+                data-loader="loadDailyReturn"
+                onclick="showSection('dailyReturnSection'); loadDailyReturn();"
+            >
+
+                <div class="menu-icon">
+                    📋
+                </div>
+
+                <h3>
+                    Daily Return Setup
+                </h3>
+
+                <p>
+                    View return time for every bus.
+                </p>
+
+            </div>
+
+
+            <div
+                class="menu-card"
+                data-section="removeLateSection"
+                data-loader="loadRemoveLateBuses"
+                onclick="showSection('removeLateSection'); loadRemoveLateBuses();"
+            >
+
+                <div class="menu-icon">
+                    ❌
+                </div>
+
+                <h3>
+                    Remove Late Bus
+                </h3>
+
+                <p>
+                    Remove a special late-bus
+                    setting and restore default time.
+                </p>
+
+            </div>
+
+
+            <div
+                class="menu-card"
+                data-section="examSection"
+                data-loader="loadExamBuses"
+                onclick="showSection('examSection'); loadExamBuses();"
+            >
+<div class="menu-icon">
+                    📝
+                </div>
+
+                <h3>
+                    Exam Time Buses
+                </h3>
+
+                <p>
+                    Add, update, view and remove
+                    exam time buses.
+                </p>
+
+            </div>
+
+        <div
+            class="menu-card notice-menu-card"
+            data-section="noticeSection"
+            data-loader="loadNotices"
+            onclick="showSection('noticeSection'); loadNotices();"
+        >
+            <div class="menu-icon">📢</div>
+            <h3>Notices</h3>
+            <p>Publish special bus updates and important announcements.</p>
+        </div>
+
+        </div>
+<!-- =================================================
+             TRANSPORT MANAGEMENT SECTION
+        ================================================== -->
+
+        <section id="transportManagementSection" class="section">
+            <div class="section-header">
+                <div>
+                    <h2>⚙️ Manage Buses & Boarding Points</h2>
+                    <p>Manage morning buses and boarding points one bus at a time.</p>
+                </div>
+                <button class="btn-primary" onclick="loadTransportManagement()">Refresh</button>
+            </div>
+
+            <div id="transportMessage" class="message"></div>
+
+            <!-- ADD BUS -->
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Bus Number</label>
+                    <input id="manageBusNumber" type="text" placeholder="Example: R10">
+                </div>
+                <div class="form-group">
+                    <label>Route Name</label>
+                    <input id="manageRouteName" type="text" placeholder="Example: Tambaram Route">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn-success" onclick="addManagedBus()">➕ Add Bus</button>
+            </div>
+
+            <!-- SELECT ONE BUS TO MANAGE -->
+            <div class="form-group" style="margin-top:20px;">
+                <label>Select Bus</label>
+                <select id="manageStopBus" onchange="loadSelectedBusManagement()">
+                    <option value="">Select Bus</option>
+                </select>
+            </div>
+
+            <div id="selectedBusManagement" style="margin-top:16px;">
+                <div class="empty">Select a bus to manage its morning boarding points.</div>
+            </div>
+
+            <!-- ADD MORNING BOARDING POINT -->
+            <div id="boardingPointForm" style="display:none; margin-top:20px;">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Boarding Point</label>
+                        <input id="manageStopName" type="text" placeholder="Example: Tambaram">
+                    </div>
+                    <div class="form-group">
+                        <label>Morning Boarding Time</label>
+                        <input id="manageStopTime" type="text" placeholder="Example: 7:15 AM">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-primary" onclick="addManagedStop()">➕ Add Boarding Point</button>
+                </div>
+            </div>
+
+            <div id="transportManagementTable" style="display:none;"></div>
+        </section>
+
+        <!-- =================================================
+             ROUTES SECTION
+        ================================================== -->
+
+        <section
+            id="routesSection"
+            class="section"
+        >
+
+            <div class="section-header">
+                <div>
+                    <h2>🚌 Bus Routes</h2>
+                    <p>View routes and boarding points like the Student and Faculty portals.</p>
+                </div>
+                <button class="btn-primary" onclick="loadRoutes()">Refresh</button>
+            </div>
+
+            <div id="routesMessage" class="message"></div>
+
+            <div id="adminRouteList" class="admin-route-list">
+                <div class="loading">Loading routes...</div>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             LATE BUS MANAGEMENT
+        ================================================== -->
+
+        <section
+            id="lateBusSection"
+            class="section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        🕒 Manage Late Bus
+                    </h2>
+
+                    <p>
+                        Add or update a late return bus.
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn-secondary"
+                    onclick="loadLateBuses()"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Travel Date
+                    </label>
+
+                    <input
+                        type="text"
+                        id="lateDate"
+                        placeholder="DD-MM-YYYY"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Bus Number
+                    </label>
+
+                    <select id="lateBusNumber">
+
+                        <option value="">
+                            Select Bus
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Departure Time
+                    </label>
+
+                    <input
+                        type="text"
+                        id="lateDepartureTime"
+                        placeholder="Example: 5:00 PM"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    class="btn-success"
+                    onclick="saveLateBus()"
+                >
+                    Add / Update Late Bus
+                </button>
+
+                <button
+                    class="btn-light"
+                    onclick="clearLateForm()"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+
+            <div id="lateMessage" class="message"></div>
+
+
+            <div class="info-box">
+
+                <strong>Important:</strong>
+
+                Late-bus time must be
+                <strong>5:00 PM or later</strong>.
+
+                Normal buses automatically use the saved default return time above.
+
+            </div>
+
+
+            <h3 style="margin-top:25px;">
+                Current Late Buses
+            </h3>
+
+            <div
+                id="lateBusTable"
+                class="table-container"
+            >
+                <div class="loading">
+                    Loading...
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             DAILY RETURN SETUP
+        ================================================== -->
+
+        <section
+            id="dailyReturnSection"
+            class="section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        📋 Daily Return Setup
+                    </h2>
+
+                    <p>
+                        View all return buses for a selected date.
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn-primary"
+                    onclick="loadDailyReturn()"
+                >
+                    Load
+                </button>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Travel Date
+                    </label>
+
+                    <input
+                        type="text"
+                        id="dailyDate"
+                        placeholder="DD-MM-YYYY"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="dailyReturnTable"
+                class="table-container"
+            >
+                <div class="loading">
+                    Select a date and click Load.
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <strong>Default return time</strong>
+                <div class="form-grid" style="margin-top:12px;">
+                    <div class="form-group">
+                        <label for="defaultReturnTimeInput">Normal return time</label>
+                        <input type="text" id="defaultReturnTimeInput" placeholder="Example: 3:50 PM">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-success" onclick="saveDefaultReturnTime()">Save Default Time</button>
+                </div>
+                <div id="defaultReturnTimeMessage" class="message"></div>
+                <small>Admin can change this anytime. This time is used for normal return buses; late/exam bus timings remain separately editable.</small>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             REMOVE LATE BUS
+        ================================================== -->
+
+        <section
+            id="removeLateSection"
+            class="section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        ❌ Remove Late Bus
+                    </h2>
+
+                    <p>
+                        Remove a late-bus setting for a date.
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn-secondary"
+                    onclick="loadRemoveLateBuses()"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Travel Date
+                    </label>
+
+                    <input
+                        type="text"
+                        id="removeLateDate"
+                        placeholder="DD-MM-YYYY"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="btn-primary"
+                onclick="loadRemoveLateBuses()"
+            >
+                Find Late Buses
+            </button>
+
+
+            <div
+                id="removeLateTable"
+                class="table-container"
+            >
+                <div class="loading">
+                    Select a date and find late buses.
+                </div>
+            </div>
+
+
+            <div class="danger-box">
+
+                Removing a late bus restores that bus's
+                default return time of
+                <strong>3:50 PM</strong>.
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             NOTICE MANAGEMENT
+        ================================================== -->
+
+        <section id="noticeSection" class="section">
+
+            <div class="section-header">
+                <div>
+                    <h2>📢 Notice Management</h2>
+                    <p>Publish notices that automatically appear in the Student and Faculty portals.</p>
+                </div>
+                <button class="btn-secondary" onclick="loadNotices(true)">Refresh</button>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Notice Title</label>
+                    <input id="noticeId" type="hidden" value="">
+                    <input id="noticeTitle" type="text" maxlength="120"
+                           placeholder="Example: Special bus for tomorrow's exam">
+                </div>
+
+                <div class="form-group">
+                    <label>Priority</label>
+                    <select id="noticePriority">
+                        <option value="NORMAL">Normal</option>
+                        <option value="IMPORTANT">Important</option>
+                        <option value="URGENT">Urgent</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="grid-column:1/-1;">
+                    <label>Notice</label>
+                    <textarea id="noticeMessage" rows="4" maxlength="1000"
+                              placeholder="Write the special bus or transport notice here..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button id="noticeSaveButton" class="btn-success" onclick="saveNotice()">📢 Publish Notice</button>
+                <button class="btn-light" onclick="clearNoticeForm()">Clear</button>
+            </div>
+
+            <div id="noticeMessageStatus" class="message"></div>
+
+            <div id="adminNoticeList" class="notice-admin-list">
+                <div class="loading">Loading notices...</div>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             EXAM TIME BUS MANAGEMENT
+        ================================================== -->
+
+        <section
+            id="examSection"
+            class="section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        📝 Exam Time Bus Management
+                    </h2>
+
+                    <p>
+                        Add, update and remove exam time buses.
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn-secondary"
+                    onclick="loadExamBuses()"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Exam Date
+                    </label>
+
+                    <input
+                        type="text"
+                        id="examDate"
+                        placeholder="DD-MM-YYYY"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Bus Number
+                    </label>
+
+                    <select id="examBusNumber">
+
+                        <option value="">
+                            Select Bus
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Departure Time
+                    </label>
+
+                    <input
+                        type="text"
+                        id="examDepartureTime"
+                        placeholder="Example: 1:30 PM"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Final Destination
+                    </label>
+
+                    <input
+                        type="text"
+                        id="examDestination"
+                        placeholder="Enter final destination"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    class="btn-success"
+                    onclick="saveExamBus()"
+                >
+                    Add / Update Exam Bus
+                </button>
+
+                <button
+                    class="btn-light"
+                    onclick="clearExamForm()"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+
+            <div id="examMessage" class="message"></div>
+
+
+            <div class="info-box">
+
+                Exam time buses may be scheduled for morning or afternoon exam timings.
+
+                <br><br>
+
+                No boarding points are required for
+                exam time buses.
+
+            </div>
+
+
+            <h3 style="margin-top:25px;">
+                Exam Time Buses
+            </h3>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        View Date
+                    </label>
+
+                    <input
+                        type="text"
+                        id="examViewDate"
+                        placeholder="DD-MM-YYYY"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="btn-primary"
+                onclick="loadExamBuses()"
+            >
+                View Exam Buses
+            </button>
+
+
+            <div
+                id="examBusTable"
+                class="table-container"
+            >
+                <div class="loading">
+                    Select a date to view exam time buses.
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+/* ============================================================
+   GENERAL
+============================================================ */
+
+function showSection(sectionId) {
+    const sections = document.querySelectorAll(".section");
+    sections.forEach(function(section) {
+        section.classList.remove("active", "admin-modal-active");
+    });
+
+    const section = document.getElementById(sectionId);
+    if (!section) {
+        console.error("Admin section not found:", sectionId);
+        return false;
+    }
+
+    section.classList.add("active", "admin-modal-active");
+    document.body.classList.add("admin-modal-open");
+
+    let closeButton = section.querySelector(".section-close");
+    if (!closeButton) {
+        closeButton = document.createElement("button");
+        closeButton.type = "button";
+        closeButton.className = "section-close";
+        closeButton.textContent = "✕ Close";
+        closeButton.onclick = closeSectionModal;
+        const header = section.querySelector(".section-header");
+        if (header) header.appendChild(closeButton);
+    }
+    return true;
+}
+
+function closeSectionModal() {
+    document.querySelectorAll(".section").forEach(function(section) {
+        section.classList.remove("active", "admin-modal-active");
+    });
+    document.body.classList.remove("admin-modal-open");
+}
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") closeSectionModal();
+});
+
+
+
+/* ============================================================
+   MESSAGE HELPER
+============================================================ */
+
+function showMessage(
+    elementId,
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(elementId);
+
+    if (!element) {
+        return;
+    }
+
+    element.className =
+        "message " + type;
+
+    element.textContent = message;
+
+}
+
+
+/* ============================================================
+   LOGOUT
+============================================================ */
+
+function logoutAdmin() {
+
+    window.location.href = "/logout";
+
+}
+
+
+/* ============================================================
+   DEFAULT DATE
+============================================================ */
+
+function todayDate() {
+
+    const date = new Date();
+
+    const day =
+        String(date.getDate()).padStart(2, "0");
+
+    const month =
+        String(date.getMonth() + 1).padStart(2, "0");
+
+    const year =
+        date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+
+}
+
+
+/* ============================================================
+   LOAD ALL BUS OPTIONS
+============================================================ */
+
+async function loadBusOptions() {
+    const lateSelect = document.getElementById("lateBusNumber");
+    const examSelect = document.getElementById("examBusNumber");
+
+    try {
+        const response = await fetch("/api/buses", { cache: "no-store" });
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        if (!data.success || !Array.isArray(data.buses)) {
+            throw new Error(data.message || "Unable to load buses");
+        }
+
+        const rebuild = (select) => {
+            if (!select) return;
+            const current = select.value;
+            select.innerHTML = '<option value="">Select Bus</option>';
+            data.buses.forEach((bus) => {
+                const option = document.createElement("option");
+                option.value = bus.bus_number;
+                option.textContent = bus.bus_number + " - " + bus.route_name;
+                select.appendChild(option);
+            });
+            if (current && data.buses.some(b => b.bus_number === current)) {
+                select.value = current;
+            }
+        };
+
+        rebuild(lateSelect);
+        rebuild(examSelect);
+    } catch (error) {
+        console.error("Unable to load bus options:", error);
+        [lateSelect, examSelect].forEach((select) => {
+            if (select && select.options.length <= 1) {
+                select.innerHTML = '<option value="">Unable to load buses</option>';
+            }
+        });
+    }
+}
+
+/* ============================================================
+   BUS / BOARDING POINT MANAGEMENT
+============================================================ */
+
+async function loadTransportManagement() {
+    showSection("transportManagementSection");
+
+    const select = document.getElementById("manageStopBus");
+    const selected = document.getElementById("selectedBusManagement");
+    const form = document.getElementById("boardingPointForm");
+
+    if (!select || !selected || !form) return;
+
+    const currentBus = select.value;
+
+    selected.innerHTML = '<div class="loading">Loading buses...</div>';
+    form.style.display = "none";
+
+    try {
+        const response = await fetch("/api/buses", {cache: "no-store"});
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Unable to load buses");
+        }
+
+        select.innerHTML = '<option value="">Select Bus</option>';
+
+        (data.buses || []).forEach(function(bus) {
+            const option = document.createElement("option");
+            option.value = bus.id;
+            option.textContent = bus.bus_number + " - " + bus.route_name;
+            select.appendChild(option);
+        });
+
+        if (currentBus && (data.buses || []).some(function(bus) {
+            return String(bus.id) === String(currentBus);
+        })) {
+            select.value = currentBus;
+            await loadSelectedBusManagement();
+        } else {
+            selected.innerHTML = '<div class="empty">Select a bus to manage its morning boarding points.</div>';
+        }
+    } catch (error) {
+        console.error("Transport management load error:", error);
+        selected.innerHTML = '<div class="empty">Unable to load buses. Please try again.</div>';
+    }
+}
+
+
+async function loadSelectedBusManagement() {
+    const select = document.getElementById("manageStopBus");
+    const selected = document.getElementById("selectedBusManagement");
+    const form = document.getElementById("boardingPointForm");
+
+    if (!select || !selected || !form) return;
+
+    const busId = select.value;
+
+    if (!busId) {
+        selected.innerHTML = '<div class="empty">Select a bus to manage its morning boarding points.</div>';
+        form.style.display = "none";
+        return;
+    }
+
+    selected.innerHTML = '<div class="loading">Loading selected bus...</div>';
+    form.style.display = "none";
+
+    try {
+        const [busResponse, stopResponse] = await Promise.all([
+            fetch("/api/buses", {cache: "no-store"}),
+            fetch("/api/admin/stops?bus_id=" + encodeURIComponent(busId), {cache: "no-store"})
+        ]);
+
+        const busData = await busResponse.json();
+        const stopData = await stopResponse.json();
+
+        if (!busResponse.ok || !busData.success || !stopResponse.ok || !stopData.success) {
+            throw new Error("Unable to load selected bus");
+        }
+
+        const bus = (busData.buses || []).find(function(item) {
+            return String(item.id) === String(busId);
+        });
+
+        if (!bus) {
+            selected.innerHTML = '<div class="empty">Selected bus was not found.</div>';
+            return;
+        }
+
+        const stops = (stopData.stops || []).filter(function(stop) {
+            return String(stop.bus_id) === String(busId)
+                && String(stop.direction || "").toUpperCase() === "MORNING";
+        });
+
+        let html = `
+            <div style="border:1px solid #e5e7eb;border-radius:10px;padding:15px;">
+                <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;">
+                    <div>
+                        <strong>🚌 ${escapeHtml(bus.bus_number)} - ${escapeHtml(bus.route_name)}</strong>
+                        <div style="margin-top:5px;color:#64748b;font-size:13px;">Morning boarding points only</div>
+                    </div>
+                    <button class="btn-danger" onclick="removeManagedBus(${Number(bus.id)})">Remove Bus</button>
+                </div>
+                <div style="margin-top:14px;">
+        `;
+
+        if (!stops.length) {
+            html += '<div class="empty">No morning boarding points for this bus.</div>';
+        } else {
+            stops.forEach(function(stop, index) {
+                html += `
+                    <div style="display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid #f1f5f9;align-items:center;">
+                        <span>
+                            📍 <strong>${index + 1}. ${escapeHtml(stop.stop_name)}</strong>
+                            ${stop.stop_time ? " - " + escapeHtml(stop.stop_time) : ""}
+                        </span>
+                        <button class="btn-danger" onclick="removeManagedStop(${Number(stop.id)})">Remove</button>
+                    </div>
+                `;
+            });
+        }
+
+        html += `
+                </div>
+            </div>
+        `;
+
+        selected.innerHTML = html;
+        form.style.display = "block";
+    } catch (error) {
+        console.error("Selected bus management error:", error);
+        selected.innerHTML = '<div class="empty">Unable to load this bus. Please try again.</div>';
+        form.style.display = "none";
+    }
+}
+
+
+async function addManagedBus() {
+    const bus_number = document.getElementById("manageBusNumber").value.trim();
+    const route_name = document.getElementById("manageRouteName").value.trim();
+
+    if (!bus_number || !route_name) {
+        return alert("Enter bus number and route name.");
+    }
+
+    try {
+        const response = await fetch("/api/admin/bus", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({bus_number, route_name})
+        });
+
+        const data = await response.json();
+        alert(data.message);
+
+        if (data.success) {
+            document.getElementById("manageBusNumber").value = "";
+            document.getElementById("manageRouteName").value = "";
+            await loadTransportManagement();
+            await loadBusOptions();
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Unable to connect to server.");
+    }
+}
+
+
+async function removeManagedBus(id) {
+    if (!confirm("Remove this bus and all of its boarding points?")) return;
+
+    try {
+        const response = await fetch("/api/admin/bus/" + id, {method: "DELETE"});
+        const data = await response.json();
+        alert(data.message);
+
+        if (data.success) {
+            document.getElementById("manageStopBus").value = "";
+            await loadTransportManagement();
+            await loadBusOptions();
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Unable to connect to server.");
+    }
+}
+
+
+async function addManagedStop() {
+    const bus_id = document.getElementById("manageStopBus").value;
+    const stop_name = document.getElementById("manageStopName").value.trim();
+    const stop_time = document.getElementById("manageStopTime").value.trim();
+
+    if (!bus_id || !stop_name) {
+        return alert("Select a bus and enter boarding point.");
+    }
+
+    try {
+        const response = await fetch("/api/admin/stop", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                bus_id,
+                stop_name,
+                stop_time,
+                direction: "MORNING"
+            })
+        });
+
+        const data = await response.json();
+        alert(data.message);
+
+        if (data.success) {
+            document.getElementById("manageStopName").value = "";
+            document.getElementById("manageStopTime").value = "";
+            await loadSelectedBusManagement();
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Unable to connect to server.");
+    }
+}
+
+
+async function removeManagedStop(id) {
+    if (!confirm("Remove this morning boarding point?")) return;
+
+    try {
+        const response = await fetch("/api/admin/stop/" + id, {method: "DELETE"});
+        const data = await response.json();
+        alert(data.message);
+
+        if (data.success) {
+            await loadSelectedBusManagement();
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Unable to connect to server.");
+    }
+}
+
+
+/* ============================================================
+   VIEW ROUTES
+============================================================ */
+
+async function loadRoutes() {
+
+    showSection("routesSection");
+
+    const container = document.getElementById("adminRouteList");
+    if (!container) return;
+
+    container.innerHTML = '<div class="loading">Loading bus routes...</div>';
+
+    try {
+        const response = await fetch("/api/buses");
+        const data = await response.json();
+
+        if (!data.success || !Array.isArray(data.buses) || data.buses.length === 0) {
+            container.innerHTML = '<div class="empty">No bus routes available.</div>';
+            return;
+        }
+
+        container.innerHTML = "";
+
+        data.buses.forEach(function(bus) {
+            const card = document.createElement("div");
+            card.className = "admin-route-card";
+
+            card.innerHTML = `
+                <div class="route-card-header">
+                    <div>
+                        <h3>🚌 ${escapeHtml(bus.bus_number)}</h3>
+                        <p class="route-name">${escapeHtml(bus.route_name || "Route")}</p>
+                    </div>
+                    <span class="badge badge-blue">Bus Route</span>
+                </div>
+
+                <div class="admin-route-details">
+                    <p>🛣️ <strong>Route:</strong> ${escapeHtml(bus.route_name || "---")}</p>
+
+                    <button type="button"
+                            class="admin-stop-toggle"
+                            onclick="toggleAdminRouteStops('${escapeHtml(bus.bus_number)}', this)">
+                        📍 View Boarding Points
+                    </button>
+
+                    <div class="admin-stop-panel">
+                        <div class="loading">Click to load boarding points...</div>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Admin route error:", error);
+        container.innerHTML = '<div class="empty">Unable to load bus routes. Please try again.</div>';
+    }
+}
+
+
+async function toggleAdminRouteStops(busNumber, button) {
+
+    const panel = button.nextElementSibling;
+
+    if (panel.classList.contains("show")) {
+        panel.classList.remove("show");
+        button.textContent = "📍 View Boarding Points";
+        return;
+    }
+
+    panel.classList.add("show");
+    button.textContent = "⏳ Loading Boarding Points...";
+
+    try {
+        const response = await fetch(
+            `/api/bus/${encodeURIComponent(busNumber)}/stops`
+        );
+        const data = await response.json();
+
+        if (!data.success || !Array.isArray(data.stops) || data.stops.length === 0) {
+            panel.innerHTML = '<div class="empty">No boarding points available.</div>';
+        } else {
+            panel.innerHTML = data.stops.map(function(stop, index) {
+                return `
+                    <div class="admin-stop-item">
+                        <span>📍</span>
+                        <div>
+                            <strong>${index + 1}. ${escapeHtml(stop.stop_name || "---")}</strong>
+                            ${stop.stop_time ? `<div><small>🕐 ${escapeHtml(stop.stop_time)}</small></div>` : ""}
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        button.textContent = "🔼 Hide Boarding Points";
+
+    } catch (error) {
+        console.error("Admin boarding point error:", error);
+        panel.innerHTML = '<div class="empty">Unable to load boarding points.</div>';
+        button.textContent = "📍 View Boarding Points";
+    }
+}
+
+
+/* ============================================================
+   VIEW MORNING STOPS
+============================================================ */
+
+async function viewMorningStops(encodedBusNumber) {
+
+    const busNumber =
+        decodeURIComponent(encodedBusNumber);
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/bus/" +
+                encodeURIComponent(busNumber) +
+                "/stops"
+            );
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+
+            alert(
+                data.message ||
+                "Unable to load stops."
+            );
+
+            return;
+        }
+
+
+        let text =
+            "Bus: " +
+            data.bus_number +
+            "\n";
+
+        text +=
+            "Route: " +
+            data.route_name +
+            "\n\n";
+
+        text +=
+            "Morning Boarding Points:\n";
+
+
+        if (!data.stops ||
+            data.stops.length === 0) {
+
+            text +=
+                "No morning boarding points available.";
+
+        } else {
+
+            data.stops.forEach(function(stop) {
+
+                text +=
+                    stop.stop_order +
+                    ". " +
+                    stop.stop_name +
+                    " - " +
+                    (
+                        stop.stop_time ||
+                        "Time not available"
+                    ) +
+                    "\n";
+
+            });
+
+        }
+
+        alert(text);
+
+    } catch (error) {
+
+        alert(
+            "Unable to connect to server."
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   LATE BUS - LOAD CURRENT
+============================================================ */
+
+async function loadLateBuses() {
+
+    await loadBusOptions();
+
+    showSection("lateBusSection");
+
+    const dateInput =
+        document.getElementById(
+            "lateDate"
+        );
+
+    if (!dateInput.value) {
+        dateInput.value = todayDate();
+    }
+
+    const date =
+        dateInput.value.trim();
+
+    const container =
+        document.getElementById(
+            "lateBusTable"
+        );
+
+    container.innerHTML =
+        '<div class="loading">Loading late buses...</div>';
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/daily-return?date=" +
+                encodeURIComponent(date)
+            );
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            container.innerHTML =
+                '<div class="empty">' +
+                escapeHtml(
+                    data.message ||
+                    "Unable to load data."
+                ) +
+                '</div>';
+
+            return;
+        }
+
+
+        const buses =
+            data.buses || [];
+
+        const lateBuses =
+            buses.filter(function(bus) {
+                return String(bus.bus_type || "").toUpperCase() === "LATE"
+                    && Number(bus.return_id) > 0;
+            });
+
+
+        if (lateBuses.length === 0) {
+
+            container.innerHTML =
+                '<div class="empty">' +
+                'No late buses configured for ' +
+                escapeHtml(date) +
+                '.</div>';
+
+            return;
+        }
+
+
+        let html = `
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Bus</th>
+                        <th>Route</th>
+                        <th>Late Departure</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+        `;
+
+
+        lateBuses.forEach(function(bus) {
+
+            html += `
+                <tr>
+
+                    <td>
+                        ${escapeHtml(bus.bus_number)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(bus.route_name)}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(bus.departure_time)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        <span class="badge badge-orange">
+                            LATE BUS
+                        </span>
+                    </td>
+
+                </tr>
+            `;
+
+        });
+
+
+        html += `
+                </tbody>
+            </table>
+        `;
+
+        container.innerHTML = html;
+
+    } catch (error) {
+
+        container.innerHTML =
+            '<div class="empty">' +
+            'Server error while loading late buses.' +
+            '</div>';
+
+    }
+
+}
+
+
+/* ============================================================
+   SAVE LATE BUS
+============================================================ */
+
+async function saveLateBus() {
+
+    const busNumber =
+        document.getElementById(
+            "lateBusNumber"
+        ).value.trim();
+
+    const travelDate =
+        document.getElementById(
+            "lateDate"
+        ).value.trim();
+
+    const departureTime =
+        document.getElementById(
+            "lateDepartureTime"
+        ).value.trim();
+
+
+    if (!travelDate ||
+        !busNumber ||
+        !departureTime) {
+
+        showMessage(
+            "lateMessage",
+            "Please fill all late-bus fields.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/late-bus",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        bus_number:
+                            busNumber,
+
+                        travel_date:
+                            travelDate,
+
+                        departure_time:
+                            departureTime
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            showMessage(
+                "lateMessage",
+                data.message ||
+                "Unable to save late bus.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        showMessage(
+            "lateMessage",
+            data.message +
+            " | " +
+            data.bus_number +
+            " | " +
+            data.departure_time,
+            "success"
+        );
+
+
+        await loadLateBuses();
+
+
+        document.getElementById(
+            "lateDepartureTime"
+        ).value = "";
+
+    } catch (error) {
+
+        showMessage(
+            "lateMessage",
+            "Unable to connect to server.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   CLEAR LATE FORM
+============================================================ */
+
+function clearLateForm() {
+
+    document.getElementById(
+        "lateBusNumber"
+    ).value = "";
+
+    document.getElementById(
+        "lateDepartureTime"
+    ).value = "";
+
+}
+
+
+/* ============================================================
+   DEFAULT RETURN TIME
+============================================================ */
+
+async function loadDefaultReturnTimeSetting() {
+    try {
+        const response = await fetch("/api/admin/default-return-time", {cache:"no-store"});
+        const data = await response.json();
+        if (data.success) {
+            const input = document.getElementById("defaultReturnTimeInput");
+            if (input) input.value = data.default_return_time || "3:50 PM";
+        }
+    } catch (error) {
+        console.error("Default return time load error:", error);
+    }
+}
+
+async function saveDefaultReturnTime() {
+    const input = document.getElementById("defaultReturnTimeInput");
+    const value = (input && input.value || "").trim();
+    if (!value) {
+        showMessage("defaultReturnTimeMessage", "Enter a return time.", "error");
+        return;
+    }
+    try {
+        const response = await fetch("/api/admin/default-return-time", {
+            method: "POST",
+            headers: {"Content-Type": "application/json", "Accept": "application/json"},
+            body: JSON.stringify({default_return_time: value})
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            showMessage("defaultReturnTimeMessage", data.message || "Unable to update default time.", "error");
+            return;
+        }
+        input.value = data.default_return_time;
+        showMessage("defaultReturnTimeMessage", "Default return time saved: " + data.default_return_time, "success");
+        await loadDailyReturn();
+    } catch (error) {
+        console.error(error);
+        showMessage("defaultReturnTimeMessage", "Unable to connect to server.", "error");
+    }
+}
+
+
+/* ============================================================
+   DAILY RETURN SETUP
+============================================================ */
+
+async function loadDailyReturn() {
+
+    showSection(
+        "dailyReturnSection"
+    );
+
+    await loadDefaultReturnTimeSetting();
+
+    const dateInput =
+        document.getElementById(
+            "dailyDate"
+        );
+
+    if (!dateInput.value) {
+        dateInput.value =
+            todayDate();
+    }
+
+    const date =
+        dateInput.value.trim();
+
+
+    const container =
+        document.getElementById(
+            "dailyReturnTable"
+        );
+
+    container.innerHTML =
+        '<div class="loading">Loading daily return setup...</div>';
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/daily-return?date=" +
+                encodeURIComponent(date)
+            );
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            container.innerHTML =
+                '<div class="empty">' +
+                escapeHtml(
+                    data.message ||
+                    "Unable to load return setup."
+                ) +
+                '</div>';
+
+            return;
+        }
+
+
+        if (!data.buses ||
+            data.buses.length === 0) {
+
+            container.innerHTML =
+                '<div class="empty">' +
+                'No buses available.' +
+                '</div>';
+
+            return;
+        }
+
+
+        let html = `
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Bus</th>
+                        <th>Route</th>
+                        <th>Return Time</th>
+                        <th>Type</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+        `;
+
+
+        data.buses.forEach(function(bus) {
+
+            const busType = String(bus.bus_type || "DEFAULT").toUpperCase();
+            const typeBadge = busType === "EXAM"
+                ? '<span class="badge badge-blue">SPECIAL BUS</span>'
+                : busType === "LATE"
+                    ? '<span class="badge badge-orange">LATE BUS</span>'
+                    : '<span class="badge badge-green">DEFAULT</span>';
+
+            html += `
+                <tr>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(bus.bus_number)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(bus.route_name)}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(bus.departure_time)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${typeBadge}
+                    </td>
+
+                </tr>
+            `;
+
+        });
+
+
+        html += `
+                </tbody>
+            </table>
+        `;
+
+
+        container.innerHTML = html;
+
+    } catch (error) {
+
+        container.innerHTML =
+            '<div class="empty">' +
+            'Server error while loading daily return.' +
+            '</div>';
+
+    }
+
+}
+
+
+/* ============================================================
+   REMOVE LATE BUS - LOAD
+============================================================ */
+
+async function loadRemoveLateBuses() {
+
+    showSection(
+        "removeLateSection"
+    );
+
+    const dateInput =
+        document.getElementById(
+            "removeLateDate"
+        );
+
+    if (!dateInput.value) {
+
+        dateInput.value =
+            todayDate();
+
+    }
+
+    const date =
+        dateInput.value.trim();
+
+
+    const container =
+        document.getElementById(
+            "removeLateTable"
+        );
+
+    container.innerHTML =
+        '<div class="loading">Finding late buses...</div>';
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/daily-return?date=" +
+                encodeURIComponent(date)
+            );
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            container.innerHTML =
+                '<div class="empty">' +
+                escapeHtml(
+                    data.message ||
+                    "Unable to load data."
+                ) +
+                '</div>';
+
+            return;
+        }
+
+
+        // Only genuine LATE buses belong in this section.
+        // Exam Time buses must never appear here.
+        const lateBuses =
+            (data.buses || [])
+            .filter(function(bus) {
+                return String(bus.bus_type || "").toUpperCase() === "LATE"
+                    && Number(bus.return_id) > 0;
+            });
+
+
+        if (lateBuses.length === 0) {
+
+            container.innerHTML =
+                '<div class="empty">' +
+                'No late buses found for ' +
+                escapeHtml(date) +
+                '.' +
+                '</div>';
+
+            return;
+        }
+
+
+        /*
+         * We need actual return_buses IDs for DELETE.
+         *
+         * Get them through the database-backed
+         * API by checking the specific bus route.
+         *
+         * The current app.py delete endpoint expects
+         * the return_buses row ID.
+         *
+         * Therefore we use an admin lookup endpoint
+         * if available; otherwise show the late bus
+         * and allow deletion through a prompt below.
+         */
+
+        let html = `
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Bus</th>
+                        <th>Route</th>
+                        <th>Late Time</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+        `;
+
+
+        /*
+         * Current app.py's daily-return response does not
+         * expose return_buses.id.
+         *
+         * So use the direct bus-number return endpoint
+         * only for display, and deletion is handled through
+         * a helper endpoint-compatible flow below.
+         */
+
+        lateBuses.forEach(function(bus) {
+
+            html += `
+                <tr>
+
+                    <td>
+                        ${escapeHtml(bus.bus_number)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(bus.route_name)}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(bus.departure_time)}
+                        </strong>
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn-danger"
+                            onclick="
+                                deleteLateBus(
+                                    ${Number(bus.return_id)},
+                                    '${encodeURIComponent(bus.bus_number)}',
+                                    '${encodeURIComponent(date)}'
+                                )
+                            "
+                        >
+                            Remove
+                        </button>
+
+                    </td>
+
+                </tr>
+            `;
+
+        });
+
+
+        html += `
+                </tbody>
+            </table>
+        `;
+
+
+        container.innerHTML = html;
+
+    } catch (error) {
+
+        container.innerHTML =
+            '<div class="empty">' +
+            'Server error.' +
+            '</div>';
+
+    }
+
+}
+
+
+/* ============================================================
+   REMOVE LATE BUS BY BUS NUMBER
+============================================================ */
+
+async function removeLateBusByBus(encodedBusNumber, encodedDate) {
+    // Kept for backward compatibility with older cached pages.
+    const busNumber = decodeURIComponent(encodedBusNumber);
+    const date = decodeURIComponent(encodedDate);
+    try {
+        const response = await fetch(
+            "/api/admin/daily-return?date=" + encodeURIComponent(date),
+            { cache: "no-store" }
+        );
+        const data = await response.json();
+        const match = (data.buses || []).find(
+            bus => bus.bus_number === busNumber && String(bus.bus_type).toUpperCase() === "LATE"
+        );
+        if (!match || !match.return_id) {
+            alert("Late bus record not found.");
+            return;
+        }
+        await deleteLateBus(match.return_id, encodedBusNumber, encodedDate);
+    } catch (error) {
+        console.error(error);
+        alert("Unable to connect to server.");
+    }
+}
+
+/* ============================================================
+   DELETE LATE BUS
+============================================================ */
+
+async function deleteLateBus(returnId, encodedBusNumber = "", encodedDate = "") {
+    if (!returnId || Number(returnId) <= 0) {
+        alert("Late bus record not found.");
+        return;
+    }
+
+    const busNumber = encodedBusNumber ? decodeURIComponent(encodedBusNumber) : "this bus";
+    const date = encodedDate ? decodeURIComponent(encodedDate) : "this date";
+
+    if (!confirm(
+        "Remove late-bus setting for " + busNumber + " on " + date + "?\n\n" +
+        "The bus will return to the saved default return time."
+    )) return;
+
+    try {
+        const response = await fetch("/api/admin/late-bus/" + Number(returnId), {
+            method: "DELETE",
+            headers: { "Accept": "application/json" }
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            alert(data.message || "Unable to remove late bus.");
+            return;
+        }
+        alert(data.message || "Late bus removed successfully.");
+        await loadRemoveLateBuses();
+        await loadDailyReturn();
+    } catch (error) {
+        console.error(error);
+        alert("Unable to connect to server.");
+    }
+}
+
+/* ============================================================
+   EXAM BUS - LOAD
+============================================================ */
+
+async function loadExamBuses() {
+
+    await loadBusOptions();
+
+    showSection(
+        "examSection"
+    );
+
+
+    const viewDate =
+        document.getElementById(
+            "examViewDate"
+        );
+
+
+    if (!viewDate.value) {
+
+        viewDate.value =
+            todayDate();
+
+    }
+
+
+    const date =
+        viewDate.value.trim();
+
+
+    const container =
+        document.getElementById(
+            "examBusTable"
+        );
+
+
+    container.innerHTML =
+        '<div class="loading">Loading exam buses...</div>';
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/exam-buses?date=" +
+                encodeURIComponent(date)
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            container.innerHTML =
+                '<div class="empty">' +
+                escapeHtml(
+                    data.message ||
+                    "Unable to load exam buses."
+                ) +
+                '</div>';
+
+            return;
+        }
+
+
+        if (!data.buses ||
+            data.buses.length === 0) {
+
+            container.innerHTML =
+                '<div class="empty">' +
+                'No exam time buses configured for ' +
+                escapeHtml(date) +
+                '.' +
+                '</div>';
+
+            return;
+        }
+
+
+        let html = `
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Bus</th>
+                        <th>Route</th>
+                        <th>Departure</th>
+                        <th>Destination</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+        `;
+
+
+        data.buses.forEach(function(bus) {
+
+            html += `
+                <tr>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(bus.bus_number)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(bus.route_name)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(bus.departure_time)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(bus.destination)}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn-danger"
+                            onclick="
+                                deleteExamBus(
+                                    ${Number(bus.id)}
+                                )
+                            "
+                        >
+                            Remove
+                        </button>
+
+                    </td>
+
+                </tr>
+            `;
+
+        });
+
+
+        html += `
+                </tbody>
+            </table>
+        `;
+
+
+        container.innerHTML = html;
+
+    } catch (error) {
+
+        container.innerHTML =
+            '<div class="empty">' +
+            'Server error while loading exam buses.' +
+            '</div>';
+
+    }
+
+}
+
+
+/* ============================================================
+   SAVE EXAM BUS
+============================================================ */
+
+async function saveExamBus() {
+
+    const busNumber =
+        document.getElementById(
+            "examBusNumber"
+        ).value.trim();
+
+    const travelDate =
+        document.getElementById(
+            "examDate"
+        ).value.trim();
+
+    const departureTime =
+        document.getElementById(
+            "examDepartureTime"
+        ).value.trim();
+
+    const destination =
+        document.getElementById(
+            "examDestination"
+        ).value.trim();
+
+
+    if (
+        !busNumber ||
+        !travelDate ||
+        !departureTime ||
+        !destination
+    ) {
+
+        showMessage(
+            "examMessage",
+            "All exam bus fields are required.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/exam-bus",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        bus_number:
+                            busNumber,
+
+                        travel_date:
+                            travelDate,
+
+                        departure_time:
+                            departureTime,
+
+                        destination:
+                            destination
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            showMessage(
+                "examMessage",
+                data.message ||
+                "Unable to save exam bus.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        showMessage(
+            "examMessage",
+            data.message +
+            " | " +
+            data.bus_number +
+            " | " +
+            data.departure_time +
+            " | " +
+            data.destination,
+            "success"
+        );
+
+
+        document.getElementById(
+            "examViewDate"
+        ).value =
+            travelDate;
+
+
+        await loadExamBuses();
+
+        clearExamForm();
+
+    } catch (error) {
+
+        showMessage(
+            "examMessage",
+            "Unable to connect to server.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   DELETE EXAM BUS
+============================================================ */
+
+async function deleteExamBus(
+    examId
+) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to remove this exam time bus?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/exam-bus/" +
+                examId,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            alert(
+                data.message ||
+                "Unable to remove exam bus."
+            );
+
+            return;
+        }
+
+
+        alert(
+            data.message ||
+            "Exam time bus removed successfully."
+        );
+
+
+        loadExamBuses();
+
+    } catch (error) {
+
+        alert(
+            "Unable to connect to server."
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   CLEAR EXAM FORM
+============================================================ */
+
+function clearExamForm() {
+
+    document.getElementById(
+        "examBusNumber"
+    ).value = "";
+
+    document.getElementById(
+        "examDepartureTime"
+    ).value = "";
+
+    document.getElementById(
+        "examDestination"
+    ).value = "";
+
+}
+
+
+/* ============================================================
+   ADMIN NOTICES
+============================================================ */
+
+async function loadNotices(showSectionFirst = false) {
+    if (showSectionFirst) showSection("noticeSection");
+
+    const list = document.getElementById("adminNoticeList");
+    if (!list) return;
+    list.innerHTML = '<div class="loading">Loading notices...</div>';
+
+    try {
+        const response = await fetch("/api/admin/notices", { cache: "no-store" });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Unable to load notices");
+        }
+
+        if (!Array.isArray(data.notices) || data.notices.length === 0) {
+            list.innerHTML = '<div class="empty">No notices published yet.</div>';
+            return;
+        }
+
+        list.innerHTML = data.notices.map(function(notice) {
+            const priority = String(notice.priority || "NORMAL").toUpperCase();
+            return `
+                <article class="admin-notice-card">
+                    <div class="admin-notice-header">
+                        <div>
+                            <h3>${escapeHtml(notice.title)}</h3>
+                            <small>${escapeHtml(notice.created_at || "")}</small>
+                        </div>
+                        <span class="notice-priority priority-${priority}">${priority}</span>
+                    </div>
+                    <p>${escapeHtml(notice.message)}</p>
+                    <div class="notice-actions">
+                        <button type="button" class="btn-light" onclick="editNoticeEncoded('${encodeURIComponent(JSON.stringify({id: notice.id, title: notice.title, message: notice.message, priority: notice.priority}))}')">✏️ Edit</button>
+                        <button type="button" class="btn-danger" onclick="deleteNotice(${Number(notice.id)})">🗑️ Delete</button>
+                    </div>
+                </article>
+            `;
+        }).join("");
+    } catch (error) {
+        console.error("Admin notice load error:", error);
+        list.innerHTML = '<div class="empty">Unable to load notices. Please try again.</div>';
+    }
+}
+
+function clearNoticeForm() {
+    const id = document.getElementById("noticeId");
+    const title = document.getElementById("noticeTitle");
+    const message = document.getElementById("noticeMessage");
+    const priority = document.getElementById("noticePriority");
+    if (id) id.value = "";
+    if (title) title.value = "";
+    if (message) message.value = "";
+    if (priority) priority.value = "NORMAL";
+    showMessage("noticeMessageStatus", "", "");
+    const button = document.getElementById("noticeSaveButton");
+    if (button) button.textContent = "📢 Publish Notice";
+}
+
+function editNoticeEncoded(encodedNotice) {
+    try {
+        editNotice(JSON.parse(decodeURIComponent(encodedNotice)));
+    } catch (error) {
+        console.error("Unable to open notice for editing:", error);
+        alert("Unable to edit this notice.");
+    }
+}
+
+function editNotice(notice) {
+    document.getElementById("noticeId").value = notice.id || "";
+    document.getElementById("noticeTitle").value = notice.title || "";
+    document.getElementById("noticeMessage").value = notice.message || "";
+    document.getElementById("noticePriority").value = notice.priority || "NORMAL";
+    showMessage("noticeMessageStatus", "Editing this notice. Click Update Notice to save.", "success");
+    const button = document.getElementById("noticeSaveButton");
+    if (button) button.textContent = "✏️ Update Notice";
+    document.getElementById("noticeTitle").focus();
+}
+
+async function saveNotice() {
+    const id = document.getElementById("noticeId")?.value.trim() || "";
+    const title = document.getElementById("noticeTitle")?.value.trim() || "";
+    const message = document.getElementById("noticeMessage")?.value.trim() || "";
+    const priority = document.getElementById("noticePriority")?.value || "NORMAL";
+
+    if (!title || !message) {
+        showMessage("noticeMessageStatus", "Notice title and message are required.", "error");
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/admin/notice", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({ id: id || null, title, message, priority })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            showMessage("noticeMessageStatus", data.message || "Unable to save notice.", "error");
+            return;
+        }
+        showMessage("noticeMessageStatus", data.message || "Notice saved successfully.", "success");
+        clearNoticeForm();
+        await loadNotices();
+    } catch (error) {
+        console.error("Notice save error:", error);
+        showMessage("noticeMessageStatus", "Unable to connect to server.", "error");
+    }
+}
+
+async function deleteNotice(noticeId) {
+    if (!confirm("Delete this notice? It will disappear from the Student and Faculty portals.")) return;
+    try {
+        const response = await fetch("/api/admin/notice/" + Number(noticeId), {
+            method: "DELETE",
+            headers: { "Accept": "application/json" }
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            alert(data.message || "Unable to delete notice.");
+            return;
+        }
+        alert(data.message || "Notice removed successfully.");
+        await loadNotices();
+    } catch (error) {
+        console.error("Notice delete error:", error);
+        alert("Unable to connect to server.");
+    }
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
+
+function escapeHtml(value) {
+
+    if (value === null ||
+        value === undefined) {
+
+        return "";
+
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ============================================================
+   MENU CARD FALLBACK / NAVIGATION
+============================================================ */
+
+function initializeAdminMenuCards() {
+    // Existing inline onclick handlers are intentionally retained as the single
+    // navigation path so every Admin dashboard card fires exactly once.
+}
+
+/* ============================================================
+   INITIALIZE
+============================================================ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        initializeAdminMenuCards();
+        loadBusOptions();
+
+        const today =
+            todayDate();
+
+
+        if (
+            document.getElementById(
+                "lateDate"
+            )
+        ) {
+            document.getElementById(
+                "lateDate"
+            ).value = today;
+        }
+
+
+        if (
+            document.getElementById(
+                "dailyDate"
+            )
+        ) {
+            document.getElementById(
+                "dailyDate"
+            ).value = today;
+        }
+
+
+        if (
+            document.getElementById(
+                "removeLateDate"
+            )
+        ) {
+            document.getElementById(
+                "removeLateDate"
+            ).value = today;
+        }
+
+
+        if (
+            document.getElementById(
+                "examDate"
+            )
+        ) {
+            document.getElementById(
+                "examDate"
+            ).value = today;
+        }
+
+
+        if (
+            document.getElementById(
+                "examViewDate"
+            )
+        ) {
+            document.getElementById(
+                "examViewDate"
+            ).value = today;
+        }
+
+    }
+);
+
+</script>
+
+
+{% endif %}
+
+</body>
+</html>

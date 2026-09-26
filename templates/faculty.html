@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>BusMate - Faculty Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- ================================================
+     HEADER
+================================================ -->
+
+<header class="topbar">
+
+    <div class="topbar-content">
+
+        <div class="brand portal-brand">
+
+            <div class="portal-logo-wrap">
+                <img src="{{ url_for('static', filename='rit-logo.png') }}" alt="RIT - Rajalakshmi Institute of Technology" class="portal-logo">
+            </div>
+
+            <div class="portal-brand-text">
+                <h1>BUSMATE</h1>
+                <p>Faculty Portal</p>
+            </div>
+
+        </div>
+
+
+        <div class="portal-actions">
+            <span class="role-chip">👨‍🏫 Faculty</span>
+            <a href="/" class="logout-btn">🚪 Logout</a>
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+
+<!-- ================================================
+     WELCOME
+================================================ -->
+
+<section class="welcome-card">
+
+    <h2>
+        Welcome to BusMate 👨‍🏫
+    </h2>
+
+    <p>
+        View bus routes, boarding points,
+        return buses and live bus location.
+    </p>
+
+</section>
+
+
+<!-- ================================================
+     PORTAL GRID
+================================================ -->
+
+<div class="portal-grid">
+
+
+<!-- ================================================
+     BUS ROUTES
+================================================ -->
+
+<details class="portal-box"
+         name="facultyPortal">
+
+    <summary>
+
+        <span class="box-icon">
+            🚌
+        </span>
+
+        <span class="box-title">
+            Bus Routes
+        </span>
+
+        <span class="box-subtitle">
+            View routes & stops
+        </span>
+
+    </summary>
+
+
+    <div class="box-content">
+
+        <h3>
+            🚌 RIT Bus Routes
+        </h3>
+
+
+        <button
+            class="primary-btn full-btn"
+            onclick="loadRoutes()">
+
+            View All Bus Routes
+
+        </button>
+
+
+        <div
+            id="routeList"
+            class="route-list">
+
+        </div>
+
+    </div>
+
+</details>
+
+
+<!-- ================================================
+     NOTICES
+================================================ -->
+
+<details class="portal-box" name="facultyPortal">
+
+    <summary>
+        <span class="box-icon">📢</span>
+        <span class="box-title">Notices</span>
+        <span class="box-subtitle">Special bus updates</span>
+    </summary>
+
+    <div class="box-content">
+        <h3>📢 BusMate Notices</h3>
+        <p>Important transport announcements from the administration.</p>
+
+        <button class="primary-btn full-btn" onclick="loadPortalNotices('facultyNoticeList')">
+            🔄 Refresh Notices
+        </button>
+
+        <div id="facultyNoticeList" class="notice-list">
+            <div class="notice-empty">Click "Refresh Notices" to view the latest notices.</div>
+        </div>
+    </div>
+
+</details>
+
+
+<!-- ================================================
+     BOARDING POINT
+================================================ -->
+
+<details class="portal-box"
+         name="facultyPortal">
+
+    <summary>
+
+        <span class="box-icon">
+            📍
+        </span>
+
+        <span class="box-title">
+            Boarding Point
+        </span>
+
+        <span class="box-subtitle">
+            Find your bus
+        </span>
+
+    </summary>
+
+
+    <div class="box-content">
+
+        <h3>
+            📍 Search Bus by Boarding Point
+        </h3>
+
+        <p>
+            Enter your boarding point to
+            find the available bus.
+        </p>
+
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="boardingPoint"
+                placeholder="Example: Ajax">
+
+
+            <button
+                class="primary-btn"
+                onclick="searchBoardingPoint()">
+
+                Search
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="searchResults"
+            class="route-list">
+
+        </div>
+
+    </div>
+
+</details>
+
+
+<!-- ================================================
+     RETURN BUS
+================================================ -->
+
+<details class="portal-box"
+         name="facultyPortal">
+
+    <summary>
+
+        <span class="box-icon">
+            🔄
+        </span>
+
+        <span class="box-title">
+            Return Bus
+        </span>
+
+        <span class="box-subtitle">
+            Evening buses
+        </span>
+
+    </summary>
+
+
+    <div class="box-content">
+
+        <h3>
+            🌆 Evening Return Buses
+        </h3>
+
+
+        <div class="info-box">
+
+            🕐 Default departure:
+
+            <strong>
+                3:50 PM
+            </strong>
+
+        </div>
+
+
+        <button
+            class="primary-btn full-btn"
+            onclick="loadReturnBuses()">
+
+            View Today's Return Buses
+
+        </button>
+
+
+        <div
+            id="returnBusList"
+            class="route-list">
+
+        </div>
+
+    </div>
+
+</details>
+
+
+<!-- ================================================
+     EXAM TIME BUS
+================================================ -->
+
+<details class="portal-box"
+         name="facultyPortal">
+
+    <summary>
+
+        <span class="box-icon">
+            📝
+        </span>
+
+        <span class="box-title">
+            Exam Time Bus
+        </span>
+
+        <span class="box-subtitle">
+            Check exam buses
+        </span>
+
+    </summary>
+
+
+    <div class="box-content">
+
+        <h3>
+            📝 Exam Time Buses
+        </h3>
+
+
+        <p>
+            Select the exam date to check
+            available buses for morning or afternoon exam timings.
+        </p>
+
+
+        <div class="date-box">
+
+            <input
+                type="date"
+                id="examDate">
+
+
+            <button
+                class="primary-btn"
+                onclick="loadExamBuses()">
+
+                Check
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="examBusList"
+            class="route-list">
+
+        </div>
+
+    </div>
+
+</details>
+
+
+<!-- ================================================
+     LIVE BUS
+================================================ -->
+
+<details class="portal-box"
+         name="facultyPortal">
+
+    <summary>
+
+        <span class="box-icon">
+            📡
+        </span>
+
+        <span class="box-title">
+            Live Bus Tracking
+        </span>
+
+        <span class="box-subtitle">
+            Track your bus
+        </span>
+
+    </summary>
+
+
+    <div class="box-content">
+
+        <h3>
+            📍 Live Bus Tracking
+        </h3>
+
+
+        <p>
+            Enter your bus number to check
+            the driver's current location.
+        </p>
+
+
+        <div class="search-box">
+
+            <select id="liveBusNumber" aria-label="Select bus to track">
+            <option value="">Select your bus</option>
+        </select>
+
+
+            <button
+                class="primary-btn"
+                onclick="showLiveBus()">
+
+                Track Bus
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="liveBusResult">
+
+        </div>
+
+    </div>
+
+</details>
+
+
+</div>
+
+</main>
+
+
+<script>
+
+
+// ====================================================
+// PORTAL NOTICES
+// ====================================================
+
+async function loadPortalNotices(containerId) {
+
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = '<div class="notice-empty">🔄 Loading notices...</div>';
+
+    try {
+        const response = await fetch("/api/notices");
+        const data = await response.json();
+
+        if (!data.success || !Array.isArray(data.notices) || data.notices.length === 0) {
+            container.innerHTML = '<div class="notice-empty">📢 No new transport notices.</div>';
+            return;
+        }
+
+        container.innerHTML = data.notices.map(function(notice) {
+            const priority = String(notice.priority || "NORMAL").toLowerCase();
+
+            return `
+                <article class="notice-card notice-${escapeHTML(priority)}">
+                    <div class="notice-card-header">
+                        <h4>📢 ${escapeHTML(notice.title)}</h4>
+                        <span class="notice-priority ${escapeHTML(priority)}">
+                            ${escapeHTML(notice.priority || "NORMAL")}
+                        </span>
+                    </div>
+                    <p>${escapeHTML(notice.message)}</p>
+                    <div class="notice-meta">${escapeHTML(notice.created_at || "")}</div>
+                </article>
+            `;
+        }).join("");
+
+    } catch (error) {
+        console.error("Notice load error:", error);
+        container.innerHTML = '<div class="notice-empty">Unable to load notices. Please try again.</div>';
+    }
+}
+
+
+// ====================================================
+// LOAD BUS ROUTES
+// ====================================================
+
+async function loadRoutes() {
+
+    const container =
+        document.getElementById("routeList");
+
+
+    container.innerHTML =
+        '<p class="loading">🔄 Loading bus routes...</p>';
+
+
+    try {
+
+        const response =
+            await fetch("/api/buses");
+
+
+        const data =
+            await response.json();
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !data.success ||
+            !data.buses ||
+            data.buses.length === 0
+        ) {
+
+            container.innerHTML =
+                '<div class="empty-card">No bus routes available.</div>';
+
+            return;
+        }
+
+
+        data.buses.forEach(function(bus, index) {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "route-card";
+
+
+            const stopId =
+                "stops-" + index;
+
+
+            card.innerHTML = `
+
+                <div class="route-card-header">
+
+                    <div>
+
+                        <h3>
+                            🚌 ${escapeHTML(bus.bus_number)}
+                        </h3>
+
+                        <p class="route-name">
+                            ${escapeHTML(bus.route_name || "Route")}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="route-details">
+
+                    <p>
+
+                        🛣️
+
+                        <strong>
+                            Route:
+                        </strong>
+
+                        ${escapeHTML(
+                            bus.route_name || "---"
+                        )}
+
+                    </p>
+
+
+                    <button
+                        class="stop-toggle"
+                        onclick="toggleStops(
+                            '${escapeHTML(
+                                bus.bus_number
+                            )}',
+                            '${stopId}',
+                            this
+                        )">
+
+                        📍 View Boarding Points
+
+                    </button>
+
+
+                    <div
+                        id="${stopId}"
+                        class="boarding-points">
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(card);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        container.innerHTML =
+            '<div class="error-box">Error loading bus routes.</div>';
+
+    }
+
+}
+
+
+// ====================================================
+// TOGGLE INDIVIDUAL BUS STOPS
+// ====================================================
+
+async function toggleStops(
+    busNumber,
+    stopId,
+    button
+) {
+
+    const stopContainer =
+        document.getElementById(stopId);
+
+
+    /*
+       If already open,
+       close only this bus.
+    */
+
+    if (
+        stopContainer.classList.contains("show")
+    ) {
+
+        stopContainer.classList.remove("show");
+
+        button.innerHTML =
+            "📍 View Boarding Points";
+
+        return;
+    }
+
+
+    /*
+       Open this bus only.
+    */
+
+    stopContainer.classList.add("show");
+
+
+    button.innerHTML =
+        "🔽 Hide Boarding Points";
+
+
+    stopContainer.innerHTML =
+        '<p class="loading">🔄 Loading boarding points...</p>';
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/bus/${encodeURIComponent(
+                    busNumber
+                )}/stops`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !data.success ||
+            !data.stops ||
+            data.stops.length === 0
+        ) {
+
+            stopContainer.innerHTML =
+                '<div class="empty-card">No boarding points available.</div>';
+
+            return;
+        }
+
+
+        stopContainer.innerHTML = "";
+
+
+        data.stops.forEach(function(stop) {
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "stop-item";
+
+
+            item.innerHTML = `
+
+                <span class="stop-icon">
+                    📍
+                </span>
+
+
+                <div class="stop-info">
+
+                    <strong>
+                        ${escapeHTML(
+                            stop.stop_name || "---"
+                        )}
+                    </strong>
+
+
+                    ${
+                        stop.stop_time
+                        ?
+
+                        `
+                        <small>
+                            🕐 ${escapeHTML(
+                                stop.stop_time
+                            )}
+                        </small>
+                        `
+
+                        :
+
+                        ""
+                    }
+
+                </div>
+
+            `;
+
+
+            stopContainer.appendChild(item);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        stopContainer.innerHTML =
+            '<div class="error-box">Unable to load boarding points.</div>';
+
+    }
+
+}
+
+
+// ====================================================
+// SEARCH BOARDING POINT
+// ====================================================
+
+async function searchBoardingPoint() {
+
+    const input =
+        document.getElementById(
+            "boardingPoint"
+        );
+
+
+    const result =
+        document.getElementById(
+            "searchResults"
+        );
+
+
+    const stop =
+        input.value.trim();
+
+
+    if (!stop) {
+
+        result.innerHTML =
+            '<div class="warning-box">Please enter a boarding point.</div>';
+
+        return;
+    }
+
+
+    result.innerHTML =
+        '<p class="loading">🔍 Searching...</p>';
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/search?stop=${encodeURIComponent(
+                    stop
+                )}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        result.innerHTML = "";
+
+
+        if (
+            !data.success ||
+            !data.results ||
+            data.results.length === 0
+        ) {
+
+            result.innerHTML = `
+
+                <div class="empty-card">
+
+                    No bus found for
+
+                    <strong>
+                        ${escapeHTML(stop)}
+                    </strong>.
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        data.results.forEach(function(bus) {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "route-card";
+
+
+            card.innerHTML = `
+
+                <div class="route-card-header">
+
+                    <div>
+
+                        <h3>
+                            🚌 ${escapeHTML(
+                                bus.bus_number
+                            )}
+                        </h3>
+
+                        <p class="route-name">
+
+                            ${escapeHTML(
+                                bus.route_name || "---"
+                            )}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="route-details">
+
+                    <p>
+
+                        📍
+
+                        <strong>
+                            Boarding:
+                        </strong>
+
+                        ${escapeHTML(
+                            bus.stop_name || stop
+                        )}
+
+                    </p>
+
+
+                    <p>
+
+                        🕐
+
+                        <strong>
+                            Time:
+                        </strong>
+
+                        ${escapeHTML(
+                            bus.stop_time || "Not available"
+                        )}
+
+                    </p>
+
+                </div>
+
+            `;
+
+
+            result.appendChild(card);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        result.innerHTML =
+            '<div class="error-box">Error searching boarding point.</div>';
+
+    }
+
+}
+
+
+// ====================================================
+// RETURN BUSES
+// ====================================================
+
+async function loadReturnBuses() {
+
+    const container =
+        document.getElementById(
+            "returnBusList"
+        );
+
+
+    container.innerHTML =
+        '<p class="loading">🔄 Loading return buses...</p>';
+
+
+    try {
+
+        const response =
+            await fetch("/api/return-buses");
+
+
+        const data =
+            await response.json();
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !data.success ||
+            !data.buses ||
+            data.buses.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty-card">
+
+                    No return buses available.
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        data.buses.forEach(function(bus) {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "route-card";
+
+
+            card.innerHTML = `
+
+                <div class="route-card-header">
+
+                    <div>
+
+                        <h3>
+                            🚌 ${escapeHTML(
+                                bus.bus_number
+                            )}
+                        </h3>
+
+                        <p class="route-name">
+
+                            ${escapeHTML(
+                                bus.route_name || "---"
+                            )}
+
+                        </p>
+
+                    </div>
+
+
+                    <span class="time-badge">
+
+                        ${escapeHTML(
+                            bus.departure_time ||
+                            "3:50 PM"
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <div class="route-details">
+
+                    <p>
+
+                        🛣️
+
+                        <strong>
+                            Route:
+                        </strong>
+
+                        ${escapeHTML(
+                            bus.route_name || "---"
+                        )}
+
+                    </p>
+
+
+                    <p>
+
+                        🕐
+
+                        <strong>
+                            Departure:
+                        </strong>
+
+                        <span class="highlight">
+
+                            ${escapeHTML(
+                                bus.departure_time ||
+                                data.default_time ||
+                                "3:50 PM"
+                            )}
+
+                        </span>
+
+                    </p>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(card);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        container.innerHTML =
+            '<div class="error-box">Error loading return buses.</div>';
+
+    }
+
+}
+
+
+// ====================================================
+// EXAM BUSES
+// ====================================================
+
+async function loadExamBuses() {
+
+    const input =
+        document.getElementById(
+            "examDate"
+        );
+
+
+    const container =
+        document.getElementById(
+            "examBusList"
+        );
+
+
+    const htmlDate =
+        input.value;
+
+
+    if (!htmlDate) {
+
+        alert(
+            "Please select exam date."
+        );
+
+        return;
+    }
+
+
+    const parts =
+        htmlDate.split("-");
+
+
+    const formattedDate =
+        `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+
+    container.innerHTML = `
+
+        <p class="loading">
+
+            📝 Loading exam buses for
+            ${formattedDate}...
+
+        </p>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/exam-buses?date=${encodeURIComponent(
+                    formattedDate
+                )}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !data.success ||
+            !data.buses ||
+            data.buses.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty-card">
+
+                    <h3>
+                        📝 No Exam Time Buses
+                    </h3>
+
+                    <p>
+
+                        No exam buses available for
+
+                        <strong>
+                            ${formattedDate}
+                        </strong>.
+
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        data.buses.forEach(function(bus) {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "route-card";
+
+
+            card.innerHTML = `
+
+                <div class="route-card-header">
+
+                    <div>
+
+                        <h3>
+                            📝 ${escapeHTML(
+                                bus.bus_number
+                            )}
+                        </h3>
+
+                        <p class="route-name">
+
+                            ${escapeHTML(
+                                bus.route_name || "---"
+                            )}
+
+                        </p>
+
+                    </div>
+
+
+                    <span class="time-badge">
+
+                        ${escapeHTML(
+                            bus.departure_time || "---"
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <div class="route-details">
+
+                    <p>
+
+                        🛣️
+
+                        <strong>
+                            Route:
+                        </strong>
+
+                        ${escapeHTML(
+                            bus.route_name || "---"
+                        )}
+
+                    </p>
+
+
+                    <p>
+
+                        🕐
+
+                        <strong>
+                            Departure:
+                        </strong>
+
+                        <span class="highlight">
+
+                            ${escapeHTML(
+                                bus.departure_time || "---"
+                            )}
+
+                        </span>
+
+                    </p>
+
+
+                    <p>
+
+                        📍
+
+                        <strong>
+                            Destination:
+                        </strong>
+
+                        ${escapeHTML(
+                            bus.destination || "---"
+                        )}
+
+                    </p>
+
+
+                    <p>
+
+                        📅
+
+                        <strong>
+                            Date:
+                        </strong>
+
+                        ${escapeHTML(
+                            bus.travel_date ||
+                            formattedDate
+                        )}
+
+                    </p>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(card);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        container.innerHTML =
+            '<div class="error-box">Error loading exam buses.</div>';
+
+    }
+
+}
+
+
+// ====================================================
+// LIVE BUS TRACKING
+// ====================================================
+
+async function showLiveBus() {
+
+    const input =
+        document.getElementById(
+            "liveBusNumber"
+        );
+
+
+    const result =
+        document.getElementById(
+            "liveBusResult"
+        );
+
+
+    const busNumber =
+        input.value
+            .trim()
+            .toUpperCase();
+
+
+    if (!busNumber) {
+
+        alert(
+            "Please enter bus number."
+        );
+
+        return;
+    }
+
+
+    result.innerHTML =
+        '<p class="loading">📍 Checking live location...</p>';
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/bus-location/${encodeURIComponent(
+                    busNumber
+                )}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            result.innerHTML = `
+
+                <div class="empty-card">
+
+                    🚌 Bus
+
+                    <strong>
+                        ${escapeHTML(busNumber)}
+                    </strong>
+
+                    not found.
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        result.innerHTML = `
+
+            <div class="route-card">
+
+
+                <div class="route-card-header">
+
+                    <div>
+
+                        <h3>
+
+                            🚌 ${escapeHTML(
+                                data.bus_number
+                            )}
+
+                        </h3>
+
+
+                        <p class="route-name">
+
+                            ${escapeHTML(
+                                data.route_name || "---"
+                            )}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="driver-live-details" style="margin:12px 0;padding:12px;border:1px solid #dbe7f3;border-radius:10px;background:#f8fbff;">
+                    ${data.location_shared && data.driver_name
+                        ? `<strong>👨‍✈️ Driver:</strong> ${escapeHTML(data.driver_name)} &nbsp; <strong>📞</strong> ${escapeHTML(data.driver_phone || "---")}`
+                        : `<strong>👨‍✈️ Driver:</strong> Not currently sharing location`}
+                </div>
+
+
+                <div class="live-status">
+
+                    ${
+                        data.location_shared
+
+                        ?
+
+                        `
+                        <span class="status-online">
+
+                            🟢 Live location available
+
+                        </span>
+                        `
+
+                        :
+
+                        `
+                        <span class="status-offline">
+
+                            🔴 Driver has not
+                            shared location yet
+
+                        </span>
+                        `
+                    }
+
+                </div>
+
+
+                ${
+                    data.location_shared
+
+                    ?
+
+                    `
+
+                    <div class="location-details">
+
+
+                        <div class="location-item">
+
+                            <span>
+                                Latitude
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(
+                                    String(
+                                        data.latitude ||
+                                        "---"
+                                    )
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="location-item">
+
+                            <span>
+                                Longitude
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(
+                                    String(
+                                        data.longitude ||
+                                        "---"
+                                    )
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="location-item">
+
+                            <span>
+                                Current Location
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(
+                                    data.current_location ||
+                                    "---"
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="location-item">
+
+                            <span>
+                                Next Point
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(
+                                    data.next_point ||
+                                    "---"
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="location-item">
+
+                            <span>
+                                Last Updated
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(
+                                    data.updated_at ||
+                                    "---"
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <button
+                        class="primary-btn full-btn"
+                        style="margin-top:15px;"
+                        onclick="openLiveMap(
+                            '${escapeHTML(
+                                data.bus_number
+                            )}'
+                        )">
+
+                        🗺️ Open Live Map
+
+                    </button>
+
+                    `
+
+                    :
+
+                    `
+
+                    <div class="warning-box">
+
+                        📍 Live location will appear
+                        when the driver shares it.
+
+                    </div>
+
+                    `
+
+                }
+
+            </div>
+
+        `;
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        result.innerHTML =
+            '<div class="error-box">Unable to connect to server.</div>';
+
+    }
+
+}
+
+
+// ====================================================
+// OPEN LIVE MAP
+// ====================================================
+
+function openLiveMap(busNumber) {
+
+    window.location.href =
+        `/live-map.html?bus=${encodeURIComponent(
+            busNumber
+        )}`;
+
+}
+
+
+// ====================================================
+// HTML ESCAPE
+// ====================================================
+
+function escapeHTML(value) {
+
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+// ====================================================
+// ENTER KEY - BOARDING SEARCH
+// ====================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const boardingInput =
+            document.getElementById(
+                "boardingPoint"
+            );
+
+
+        if (boardingInput) {
+
+            boardingInput.addEventListener(
+                "keypress",
+                function(event) {
+
+                    if (event.key === "Enter") {
+
+                        searchBoardingPoint();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        const noticeList =
+            document.getElementById(
+                "facultyNoticeList"
+            );
+
+        if (noticeList) {
+            loadPortalNotices("facultyNoticeList");
+        }
+
+
+        const liveInput =
+            document.getElementById(
+                "liveBusNumber"
+            );
+
+
+        if (liveInput) {
+
+            liveInput.addEventListener(
+                "keypress",
+                function(event) {
+
+                    if (event.key === "Enter") {
+
+                        showLiveBus();
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+
+
+<script>
+(function() {
+    let selectedBusTimer = null;
+    const select = document.getElementById('liveBusNumber');
+    if (!select) return;
+
+    async function loadTrackableBuses() {
+        try {
+            const response = await fetch('/api/buses', {cache:'no-store'});
+            const data = await response.json();
+            if (!data.success) return;
+            const current = select.value;
+            select.innerHTML = '<option value="">Select your bus</option>' + data.buses.map(function(bus) {
+                return '<option value="' + escapeHTML(bus.bus_number) + '">' + escapeHTML(bus.bus_number + ' - ' + bus.route_name) + '</option>';
+            }).join('');
+            if (current && data.buses.some(b => b.bus_number === current)) select.value = current;
+        } catch (e) { console.error('Bus list error:', e); }
+    }
+
+    function statusText(status) {
+        const map = {NOT_STARTED:'⚪ Not Started', ON_ROUTE:'🟢 On Route', DELAYED:'🟡 Delayed', BREAKDOWN:'🔴 Breakdown', COMPLETED:'🔵 Trip Completed'};
+        return map[status] || '⚪ Not Started';
+    }
+
+    async function refreshSelectedBusStatus() {
+        const bus = select.value;
+        const box = document.getElementById('selectedBusStatus');
+        if (!box || !bus) { if (box) box.innerHTML=''; return; }
+        try {
+            const response = await fetch('/api/bus-location/' + encodeURIComponent(bus), {cache:'no-store'});
+            const data = await response.json();
+            if (!data.success) return;
+            box.innerHTML = '<div class="selected-status-card"><strong>Bus ' + escapeHTML(data.bus_number) + '</strong><span>' + statusText(data.bus_status) + '</span>' + (data.next_point ? '<small>Next stop: ' + escapeHTML(data.next_point) + '</small>' : '') + '</div>';
+        } catch (e) { console.error('Status refresh error:', e); }
+    }
+
+    select.addEventListener('change', function() {
+        if (selectedBusTimer) clearInterval(selectedBusTimer);
+        if (!select.value) { document.getElementById('liveBusResult').innerHTML=''; document.getElementById('selectedBusStatus').innerHTML=''; return; }
+        showLiveBus();
+        refreshSelectedBusStatus();
+        selectedBusTimer = setInterval(function() { refreshSelectedBusStatus(); }, 2000);
+    });
+    async function loadDefaultReturnTime() {
+        try {
+            const response = await fetch('/api/return-buses', {cache:'no-store'});
+            const data = await response.json();
+            const label = document.getElementById('defaultReturnTime');
+            if (label && data.success && data.default_time) label.textContent = data.default_time;
+        } catch (e) { console.error('Default return time error:', e); }
+    }
+
+    loadTrackableBuses();
+    loadDefaultReturnTime();
+})();
+</script>
+
+
+<style>
+.selected-bus-status{margin-top:14px;}
+.selected-status-card{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 15px;border:1px solid #dbe7f3;border-radius:12px;background:#f8fbff;}
+.selected-status-card strong{color:#082d5c;}
+.selected-status-card span{font-weight:800;}
+.selected-status-card small{width:100%;color:#64748b;}
+</style>
+
+
+
+
+
+
+</body>
+
+</html>

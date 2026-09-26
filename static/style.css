@@ -1,0 +1,607 @@
+/* =========================================
+   BUSMATE - COMMON PORTAL DESIGN
+   ========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f1f5fb;
+    color: #172033;
+}
+
+
+/* =========================================
+   TOP HEADER
+   ========================================= */
+
+.topbar {
+    background: #2864e6;
+    color: white;
+
+    min-height: 105px;
+    padding: 20px 6%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+}
+
+.topbar h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.topbar p {
+    margin: 5px 0 0;
+    font-size: 16px;
+    opacity: 0.95;
+}
+
+.logout-btn {
+    background: #e53935;
+    color: white;
+
+    text-decoration: none;
+
+    padding: 11px 20px;
+    border-radius: 8px;
+
+    font-weight: 600;
+}
+
+.logout-btn:hover {
+    background: #c62828;
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+   ========================================= */
+
+.container {
+    width: min(1100px, 92%);
+    margin: 28px auto 60px;
+}
+
+
+/* =========================================
+   WELCOME CARD
+   ========================================= */
+
+.welcome-card {
+    background: white;
+
+    padding: 25px 30px;
+
+    border-radius: 14px;
+
+    margin-bottom: 22px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+
+    border-left: 5px solid #2864e6;
+}
+
+.welcome-card h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.welcome-card p {
+    margin-bottom: 0;
+    color: #64748b;
+}
+
+
+/* =========================================
+   PORTAL MENU CARDS
+   ========================================= */
+
+.portal-menu {
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+
+    gap: 14px;
+
+    margin-bottom: 28px;
+}
+
+.menu-card {
+    background: white;
+
+    min-height: 125px;
+
+    padding: 18px 12px;
+
+    border-radius: 14px;
+
+    text-decoration: none;
+    color: #172033;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.menu-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.13);
+}
+
+.menu-icon {
+    font-size: 28px;
+    margin-bottom: 9px;
+}
+
+.menu-card strong {
+    font-size: 15px;
+    line-height: 1.25;
+}
+
+.menu-card small {
+    margin-top: 6px;
+
+    color: #718096;
+
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+
+/* =========================================
+   MAIN CONTENT SECTIONS
+   ========================================= */
+
+.portal-section {
+    background: white;
+
+    padding: 25px;
+
+    margin-bottom: 24px;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.08);
+
+    scroll-margin-top: 20px;
+}
+
+.portal-section h2 {
+    margin-top: 0;
+
+    font-size: 22px;
+
+    color: #172033;
+}
+
+
+/* =========================================
+   ROUTE LIST
+   ========================================= */
+
+.route-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+.route-card {
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+
+    padding: 18px;
+
+    margin-bottom: 12px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.route-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 14px rgba(0, 0, 0, 0.08);
+}
+
+.route-card h3 {
+    margin-top: 0;
+
+    color: #2864e6;
+
+    font-size: 18px;
+}
+
+.route-card h4 {
+    margin-bottom: 8px;
+}
+
+.route-card p {
+    margin: 7px 0;
+
+    color: #475569;
+}
+
+
+/* =========================================
+   BOARDING POINTS
+   ========================================= */
+
+.boarding-points {
+
+    background: white;
+
+    border-radius: 10px;
+
+    padding: 8px 12px;
+
+    margin-top: 10px;
+    display: none;
+    gap: 8px;
+}
+
+/* Show boarding points when a bus route opens them. */
+.boarding-points.show,
+.boarding-panel.show .boarding-points {
+    display: block;
+}
+
+.boarding-points p {
+    padding: 6px 0;
+
+    border-bottom: 1px solid #edf2f7;
+}
+
+.boarding-points p:last-child {
+    border-bottom: none;
+}
+
+
+/* =========================================
+   INPUTS
+   ========================================= */
+
+input,
+select {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    background: white;
+}
+
+input:focus,
+select:focus {
+    border-color: #2864e6;
+
+    box-shadow:
+        0 0 0 3px rgba(40, 100, 230, 0.12);
+}
+
+
+/* =========================================
+   SEARCH BOX
+   ========================================= */
+
+.search-box {
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+}
+
+.search-box input {
+    flex: 1;
+}
+
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+
+button {
+    background: #2864e6;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 20px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+button:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   DATE INPUT
+   ========================================= */
+
+#examDate {
+    max-width: 260px;
+
+    margin-bottom: 12px;
+}
+
+
+/* =========================================
+   RESULT AREAS
+   ========================================= */
+
+#searchResults,
+#returnBusList,
+#examBusList,
+#liveBusResult {
+    margin-top: 18px;
+}
+
+
+/* =========================================
+   LIVE MAP BUTTON
+   ========================================= */
+
+#liveBusResult button {
+    margin-top: 10px;
+}
+
+
+/* =========================================
+   MOBILE RESPONSIVE
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .portal-menu {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .route-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .topbar {
+        padding: 18px 20px;
+
+        min-height: 90px;
+    }
+
+    .topbar h1 {
+        font-size: 23px;
+    }
+
+    .topbar p {
+        font-size: 13px;
+    }
+
+    .logout-btn {
+        padding: 9px 13px;
+
+        font-size: 13px;
+    }
+
+    .container {
+        width: 94%;
+
+        margin-top: 18px;
+    }
+
+    .welcome-card {
+        padding: 20px;
+    }
+
+    .welcome-card h2 {
+        font-size: 20px;
+    }
+
+    .portal-menu {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+
+    .menu-card {
+        min-height: 115px;
+    }
+
+    .portal-section {
+        padding: 18px;
+    }
+
+    .portal-section h2 {
+        font-size: 19px;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .search-box button {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    #examDate {
+        max-width: 100%;
+    }
+}
+
+
+/* =========================================
+   SMALL PHONES
+   ========================================= */
+
+@media (max-width: 380px) {
+
+    .topbar {
+        flex-direction: column;
+
+        gap: 12px;
+
+        text-align: center;
+    }
+
+    .portal-menu {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .menu-card {
+        padding: 14px 8px;
+    }
+
+    .menu-icon {
+        font-size: 24px;
+    }
+
+    .menu-card strong {
+        font-size: 13px;
+    }
+
+    .menu-card small {
+        display: none;
+    }
+}
+
+/* =========================================
+   NOTICES
+   ========================================= */
+
+.notice-list {
+    display: grid;
+    gap: 12px;
+}
+
+.notice-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #2563eb;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 3px 12px rgba(15,23,42,.05);
+}
+
+.notice-card.notice-important {
+    border-left-color: #d97706;
+}
+
+.notice-card.notice-urgent {
+    border-left-color: #dc2626;
+}
+
+.notice-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.notice-card h4 {
+    margin: 0;
+    color: #1e3a8a;
+    font-size: 16px;
+}
+
+.notice-card p {
+    margin: 9px 0 7px;
+    color: #475569;
+    line-height: 1.55;
+    white-space: pre-wrap;
+}
+
+.notice-meta {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.notice-priority {
+    flex: 0 0 auto;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.notice-priority.normal {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.notice-priority.important {
+    background: #ffedd5;
+    color: #9a3412;
+}
+
+.notice-priority.urgent {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.notice-empty {
+    text-align: center;
+    padding: 18px;
+    color: #64748b;
+    background: #f8fafc;
+    border-radius: 10px;
+}

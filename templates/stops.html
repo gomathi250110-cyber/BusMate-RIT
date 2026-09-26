@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BusMate - Bus Stops</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        /* ================= HEADER ================= */
+
+        header {
+            background: #1e3a8a;
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 7px;
+            background: rgba(255,255,255,0.12);
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            font-size: 32px;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #6b7280;
+        }
+
+        /* ================= CARDS ================= */
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            color: #1e3a8a;
+            margin-bottom: 18px;
+            font-size: 21px;
+        }
+
+        /* ================= FORM ================= */
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        select,
+        input {
+            flex: 1;
+            min-width: 220px;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+        }
+
+        button {
+            padding: 13px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .search-btn {
+            background: #059669;
+        }
+
+        .search-btn:hover {
+            background: #047857;
+        }
+
+        /* ================= BUS INFO ================= */
+
+        .bus-info {
+            display: none;
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .bus-info h3 {
+            color: #1e3a8a;
+            margin-bottom: 7px;
+        }
+
+        .bus-info p {
+            margin: 5px 0;
+        }
+
+        /* ================= STOP TABLE ================= */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: #1e3a8a;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .stop-number {
+            width: 80px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .time {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        /* ================= SEARCH RESULTS ================= */
+
+        .search-result {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 12px;
+            background: #fafafa;
+        }
+
+        .search-result h3 {
+            color: #1e3a8a;
+            margin-bottom: 7px;
+        }
+
+        .search-result p {
+            margin: 4px 0;
+        }
+
+        .search-time {
+            font-weight: bold;
+            color: #059669;
+        }
+
+        /* ================= MESSAGE ================= */
+
+        .message {
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .empty {
+            text-align: center;
+            color: #6b7280;
+            padding: 30px;
+        }
+
+        /* ================= LOADING ================= */
+
+        .loading {
+            text-align: center;
+            padding: 25px;
+            color: #6b7280;
+            display: none;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 650px) {
+
+            header {
+                justify-content: center;
+                text-align: center;
+            }
+
+            nav {
+                justify-content: center;
+            }
+
+            .container {
+                width: 95%;
+                margin-top: 20px;
+            }
+
+            .page-title h1 {
+                font-size: 27px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            select,
+            input,
+            button {
+                width: 100%;
+                min-width: 100%;
+            }
+
+            th,
+            td {
+                padding: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🚌 BusMate</div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/routes">Routes</a>
+        <a href="/stops">Stops</a>
+        <a href="/live-map">Live Map</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+
+<div class="container">
+
+    <div class="page-title">
+        <h1>Bus Stops & Timings</h1>
+        <p>View the stops and morning timings for any bus.</p>
+    </div>
+
+
+    <!-- ================= BUS SELECTION ================= -->
+
+    <div class="card">
+
+        <h2>🚌 Select Bus</h2>
+
+        <div class="form-row">
+
+            <select id="busSelect">
+                <option value="">Loading buses...</option>
+            </select>
+
+            <button onclick="loadStops()">
+                View Stops
+            </button>
+
+        </div>
+
+        <div id="busMessage" class="message error"></div>
+
+    </div>
+
+
+    <!-- ================= BUS INFORMATION ================= -->
+
+    <div id="busInfo" class="bus-info">
+
+        <h3 id="busTitle">Bus</h3>
+
+        <p>
+            <strong>Route:</strong>
+            <span id="routeName"></span>
+        </p>
+
+        <p>
+            <strong>Total Stops:</strong>
+            <span id="totalStops">0</span>
+        </p>
+
+    </div>
+
+
+    <!-- ================= STOP TABLE ================= -->
+
+    <div class="card">
+
+        <h2>📍 Morning Stops</h2>
+
+        <div id="loadingStops" class="loading">
+            Loading stop information...
+        </div>
+
+        <div class="table-wrapper">
+
+            <table id="stopsTable" style="display:none;">
+
+                <thead>
+                    <tr>
+                        <th class="stop-number">No.</th>
+                        <th>Stop Name</th>
+                        <th>Morning Time</th>
+                    </tr>
+                </thead>
+
+                <tbody id="stopsBody"></tbody>
+
+            </table>
+
+        </div>
+
+        <div id="emptyStops" class="empty">
+            Select a bus to view its stops.
+        </div>
+
+    </div>
+
+
+    <!-- ================= SEARCH ================= -->
+
+    <div class="card">
+
+        <h2>🔎 Search by Boarding Point</h2>
+
+        <div class="form-row">
+
+            <input
+                type="text"
+                id="stopSearch"
+                placeholder="Enter boarding point..."
+                onkeydown="handleSearchKey(event)"
+            >
+
+            <button
+                class="search-btn"
+                onclick="searchBus()"
+            >
+                Search
+            </button>
+
+        </div>
+
+        <div id="searchMessage" class="message"></div>
+
+        <div id="searchResults"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // ========================================================
+    // LOAD ALL BUSES
+    // ========================================================
+
+    async function loadBuses() {
+
+        const select = document.getElementById("busSelect");
+
+        try {
+
+            const response = await fetch("/api/buses");
+
+            const data = await response.json();
+
+            select.innerHTML =
+                '<option value="">-- Select Bus --</option>';
+
+            if (!data.success || !data.buses.length) {
+
+                select.innerHTML =
+                    '<option value="">No buses available</option>';
+
+                return;
+            }
+
+            data.buses.forEach(bus => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = bus.bus_number;
+
+                option.textContent =
+                    `${bus.bus_number} - ${bus.route_name}`;
+
+                select.appendChild(option);
+
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            select.innerHTML =
+                '<option value="">Unable to load buses</option>';
+        }
+    }
+
+
+    // ========================================================
+    // LOAD STOPS
+    // ========================================================
+
+    async function loadStops() {
+
+        const busNumber =
+            document.getElementById("busSelect").value;
+
+        const table =
+            document.getElementById("stopsTable");
+
+        const body =
+            document.getElementById("stopsBody");
+
+        const empty =
+            document.getElementById("emptyStops");
+
+        const loading =
+            document.getElementById("loadingStops");
+
+        const busInfo =
+            document.getElementById("busInfo");
+
+        const message =
+            document.getElementById("busMessage");
+
+        message.style.display = "none";
+
+        if (!busNumber) {
+
+            showMessage(
+                message,
+                "Please select a bus.",
+                "error"
+            );
+
+            return;
+        }
+
+        table.style.display = "none";
+        empty.style.display = "none";
+        loading.style.display = "block";
+
+        body.innerHTML = "";
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/bus/${encodeURIComponent(busNumber)}/stops`
+                );
+
+            const data =
+                await response.json();
+
+            loading.style.display = "none";
+
+            if (!response.ok || !data.success) {
+
+                showMessage(
+                    message,
+                    data.message || "Unable to load stops.",
+                    "error"
+                );
+
+                empty.textContent =
+                    "No stop information available.";
+
+                empty.style.display = "block";
+
+                return;
+            }
+
+            document.getElementById("busTitle").textContent =
+                `Bus ${data.bus_number}`;
+
+            document.getElementById("routeName").textContent =
+                data.route_name;
+
+            document.getElementById("totalStops").textContent =
+                data.stops.length;
+
+            busInfo.style.display = "block";
+
+            if (!data.stops.length) {
+
+                empty.textContent =
+                    "No morning stops have been added for this bus.";
+
+                empty.style.display = "block";
+
+                return;
+            }
+
+            data.stops.forEach((stop, index) => {
+
+                const row =
+                    document.createElement("tr");
+
+                const number =
+                    document.createElement("td");
+
+                number.className = "stop-number";
+
+                number.textContent =
+                    stop.stop_order || index + 1;
+
+                const name =
+                    document.createElement("td");
+
+                name.textContent =
+                    stop.stop_name;
+
+                const time =
+                    document.createElement("td");
+
+                time.className = "time";
+
+                time.textContent =
+                    stop.stop_time || "Not available";
+
+                row.appendChild(number);
+                row.appendChild(name);
+                row.appendChild(time);
+
+                body.appendChild(row);
+
+            });
+
+            table.style.display = "table";
+
+        } catch (error) {
+
+            console.error(error);
+
+            loading.style.display = "none";
+
+            showMessage(
+                message,
+                "Unable to connect to the server.",
+                "error"
+            );
+
+            empty.textContent =
+                "Could not load stop information.";
+
+            empty.style.display = "block";
+        }
+    }
+
+
+    // ========================================================
+    // SEARCH BUS BY STOP
+    // ========================================================
+
+    async function searchBus() {
+
+        const input =
+            document.getElementById("stopSearch");
+
+        const stop =
+            input.value.trim();
+
+        const results =
+            document.getElementById("searchResults");
+
+        const message =
+            document.getElementById("searchMessage");
+
+        results.innerHTML = "";
+
+        message.style.display = "none";
+
+        if (!stop) {
+
+            showMessage(
+                message,
+                "Please enter a boarding point.",
+                "error"
+            );
+
+            return;
+        }
+
+        results.innerHTML =
+            '<div class="loading" style="display:block;">Searching...</div>';
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/search?stop=${encodeURIComponent(stop)}`
+                );
+
+            const data =
+                await response.json();
+
+            results.innerHTML = "";
+
+            if (!response.ok || !data.success) {
+
+                showMessage(
+                    message,
+                    data.message || "Search failed.",
+                    "error"
+                );
+
+                return;
+            }
+
+            if (!data.results.length) {
+
+                results.innerHTML =
+                    `<div class="empty">
+                        No buses found for "${escapeHtml(stop)}".
+                    </div>`;
+
+                return;
+            }
+
+            data.results.forEach(result => {
+
+                const card =
+                    document.createElement("div");
+
+                card.className = "search-result";
+
+                const title =
+                    document.createElement("h3");
+
+                title.textContent =
+                    `🚌 Bus ${result.bus_number}`;
+
+                const route =
+                    document.createElement("p");
+
+                route.innerHTML =
+                    `<strong>Route:</strong>
+                     ${escapeHtml(result.route_name)}`;
+
+                const boarding =
+                    document.createElement("p");
+
+                boarding.innerHTML =
+                    `<strong>Boarding Point:</strong>
+                     ${escapeHtml(result.stop_name)}`;
+
+                const time =
+                    document.createElement("p");
+
+                time.className = "search-time";
+
+                time.innerHTML =
+                    `⏰ Morning Time:
+                     ${escapeHtml(result.stop_time || "Not available")}`;
+
+                card.appendChild(title);
+                card.appendChild(route);
+                card.appendChild(boarding);
+                card.appendChild(time);
+
+                results.appendChild(card);
+
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            results.innerHTML = "";
+
+            showMessage(
+                message,
+                "Unable to connect to the server.",
+                "error"
+            );
+        }
+    }
+
+
+    // ========================================================
+    // ENTER KEY SEARCH
+    // ========================================================
+
+    function handleSearchKey(event) {
+
+        if (event.key === "Enter") {
+
+            searchBus();
+
+        }
+    }
+
+
+    // ========================================================
+    // MESSAGE
+    // ========================================================
+
+    function showMessage(element, text, type) {
+
+        element.textContent = text;
+
+        element.className =
+            `message ${type}`;
+
+        element.style.display = "block";
+    }
+
+
+    // ========================================================
+    // BASIC HTML ESCAPE
+    // ========================================================
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value == null ? "" : value;
+
+        return div.innerHTML;
+    }
+
+
+    // ========================================================
+    // INITIALIZE
+    // ========================================================
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadBuses
+    );
+
+</script>
+
+</body>
+</html>

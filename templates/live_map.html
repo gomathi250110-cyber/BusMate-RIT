@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>BusMate - Live Bus Tracking</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- LEAFLET CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <style>
+
+        #map {
+
+            width: 100%;
+            height: 500px;
+
+            border-radius: 15px;
+
+            margin-top: 20px;
+        }
+
+        .map-info {
+
+            padding: 20px;
+            margin-bottom: 15px;
+
+            border-radius: 12px;
+
+            background: white;
+        }
+
+        .status {
+
+            font-weight: bold;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}">
+</head>
+
+
+<body>
+
+<header class="topbar">
+
+    <div>
+
+        <h1>🚌 BusMate</h1>
+
+        <p>Live Bus Tracking</p>
+
+    </div>
+
+    <a
+        href="/"
+        class="logout-btn">
+
+        Logout
+
+    </a>
+
+</header>
+
+
+<main class="container">
+
+
+    <!-- BUS INFORMATION -->
+
+    <section class="welcome-card">
+
+        <h2>
+            📍 Live Bus Location
+        </h2>
+
+        <p id="busInfo">
+            Loading bus information...
+        </p>
+        <div id="driverInfo" class="driver-card">Driver: --- &nbsp; 📞 ---</div>
+
+        <p
+            class="status"
+            id="locationStatus">
+
+            Connecting...
+
+        </p>
+
+        <p>
+
+            Last Updated:
+
+            <strong id="lastUpdated">
+                ---
+            </strong>
+
+        </p>
+
+    </section>
+
+
+    <!-- MAP -->
+
+    <section class="portal-section">
+
+        <div id="map"></div>
+
+    </section>
+
+
+    <!-- GPS DETAILS -->
+
+    <section class="portal-section">
+
+        <h2>📡 GPS Details</h2>
+
+        <p>
+
+            Latitude:
+
+            <strong id="latitude">
+                ---
+            </strong>
+
+        </p>
+
+        <p>
+
+            Longitude:
+
+            <strong id="longitude">
+                ---
+            </strong>
+
+        </p>
+
+        <p>
+
+            Current Location:
+
+            <strong id="currentLocation">
+                ---
+            </strong>
+
+        </p>
+
+        <p>
+
+            Next Point:
+
+            <strong id="nextPoint">
+                ---
+            </strong>
+
+        </p>
+
+    </section>
+
+
+</main>
+
+
+<!-- LEAFLET JS -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script>
+
+let map;
+let busMarker = null;
+let busNumber = null;
+let lastPosition = null;
+let targetPosition = null;
+let animationFrame = null;
+let lastServerUpdate = 0;
+let firstFix = true;
+
+const params = new URLSearchParams(window.location.search);
+busNumber = params.get("bus");
+
+function initMap() {
+    const initialPosition = [12.8256, 80.0453];
+    map = L.map("map").setView(initialPosition, 14);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+    if (!busNumber) {
+        document.getElementById("locationStatus").textContent = "❌ Bus number not provided.";
+        return;
+    }
+    document.getElementById("busInfo").textContent = `Tracking Bus ${busNumber}`;
+    updateLiveLocation();
+    setInterval(updateLiveLocation, 1000);
+}
+
+function animateMarkerTo(position, duration=900) {
+    if (!busMarker) return;
+    const from = lastPosition || busMarker.getLatLng();
+    const start = performance.now();
+    function frame(now) {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = t * (2 - t);
+        const lat = from[0] + (position[0] - from[0]) * eased;
+        const lng = from[1] + (position[1] - from[1]) * eased;
+        busMarker.setLatLng([lat, lng]);
+        if (t < 1) animationFrame = requestAnimationFrame(frame);
+        else { lastPosition = position; animationFrame = null; }
+    }
+    if (animationFrame) cancelAnimationFrame(animationFrame);
+    animationFrame = requestAnimationFrame(frame);
+}
+
+
+async function updateLiveLocation() {
+    if (!busNumber) return;
+    try {
+        const response = await fetch(`/api/bus-location/${encodeURIComponent(busNumber)}`, {cache:"no-store"});
+        const data = await response.json();
+        if (!data.success) {
+            document.getElementById("locationStatus").textContent = "❌ Bus not found.";
+            return;
+        }
+        if (data.location_shared && data.driver_name) {
+            document.getElementById("driverInfo").innerHTML = `<strong>👨‍✈️ Driver:</strong> ${escapeHtml(data.driver_name)} &nbsp; <strong>📞</strong> ${escapeHtml(data.driver_phone || "---")}`;
+        } else {
+            document.getElementById("driverInfo").innerHTML = `<strong>👨‍✈️ Driver:</strong> Not currently sharing location`;
+        }
+        if (!data.location_shared) {
+            document.getElementById("locationStatus").textContent = "🔴 Driver has not shared location yet.";
+            return;
+        }
+        const latitude = Number(data.latitude), longitude = Number(data.longitude);
+        if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+            document.getElementById("locationStatus").textContent = "⚠️ Invalid GPS coordinates.";
+            return;
+        }
+        const position = [latitude, longitude];
+        document.getElementById("locationStatus").textContent = "🟢 Live location active";
+        document.getElementById("lastUpdated").textContent = data.updated_at || "---";
+        document.getElementById("latitude").textContent = latitude.toFixed(6);
+        document.getElementById("longitude").textContent = longitude.toFixed(6);
+        document.getElementById("currentLocation").textContent = data.current_location || "GPS location";
+        document.getElementById("nextPoint").textContent = data.next_point || "---";
+        if (!busMarker) {
+            const busIcon = L.divIcon({className:"", html:'<div class="bus-live-icon">🚌</div>', iconSize:[42,42], iconAnchor:[21,21]});
+            busMarker = L.marker(position, {icon:busIcon, zIndexOffset:1000}).addTo(map);
+            busMarker.bindPopup(`<div>🚌 Bus ${escapeHtml(data.bus_number)}<br>👨‍✈️ ${escapeHtml(data.driver_name || "Not assigned")}<br>🟢 Live</div>`);
+            lastPosition = position;
+            map.setView(position, 15);
+            firstFix = false;
+        } else {
+            animateMarkerTo(position, 950);
+            const center = map.getCenter();
+            if (center && map.distance(center, position) > 800) map.panTo(position, {animate:true, duration:0.7});
+        }
+        lastServerUpdate = Date.now();
+    } catch (error) {
+        console.error("Live location error:", error);
+        document.getElementById("locationStatus").textContent = "⚠️ Unable to connect to server.";
+    }
+}
+
+function escapeHtml(value) {
+    return String(value == null ? "" : value).replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
+}
+
+document.addEventListener("DOMContentLoaded", initMap);
+</script>
+
+</body>
+
+</html>

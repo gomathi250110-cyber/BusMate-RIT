@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BusMate - Driver Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="portal-brand">
+        <div class="portal-logo-wrap">
+            <img src="{{ url_for('static', filename='rit-logo.png') }}" alt="RIT - Rajalakshmi Institute of Technology" class="portal-logo">
+        </div>
+        <div class="portal-brand-text">
+            <h1>BUSMATE</h1>
+            <p>Driver Portal</p>
+        </div>
+    </div>
+
+    <div class="portal-actions">
+        <span class="role-chip">🚌 Driver</span>
+        <a href="/" class="logout-btn">🚪 Logout</a>
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <!-- WELCOME -->
+
+    <section class="welcome-card">
+
+        <h2>Welcome Driver 🚌</h2>
+
+        <p>
+            Welcome, <strong>{{ user_name or "Driver" }}</strong>. Select the bus you are driving below, then start live location sharing.
+        </p>
+
+    </section>
+
+
+    <!-- BUS SELECTION -->
+
+    <section class="portal-section">
+
+        <h2>👤 Driver Account</h2>
+        <p>Name: <strong>{{ user_name or "---" }}</strong></p>
+        <p>Phone: <strong>{{ session.get("driver_phone", "---") }}</strong></p>
+
+    </section>
+
+    <section class="portal-section">
+        <h2>🚌 Select Bus</h2>
+        <p>Select the bus you are currently driving. All available buses are shown here.</p>
+        <select id="driverBusNumber" style="margin-top:8px;">
+            <option value="">Loading buses...</option>
+        </select>
+        <button class="primary-btn" id="selectDriverBusButton" type="button" onclick="selectDriverBus()" style="margin-top:12px;">🚌 Select This Bus</button>
+        <p id="busSelectionMessage" style="margin-top:10px;"></p>
+    </section>
+
+
+
+    <section class="portal-section">
+        <h2>🚦 Bus Status</h2>
+        <p>Choose the current status of the selected bus. Students and faculty will see only the status of the bus they track.</p>
+        <select id="driverBusStatus">
+            <option value="NOT_STARTED">⚪ Not Started</option>
+            <option value="ON_ROUTE" selected>🟢 On Route</option>
+            <option value="DELAYED">🟡 Delayed</option>
+            <option value="BREAKDOWN">🔴 Breakdown</option>
+            <option value="COMPLETED">🔵 Trip Completed</option>
+        </select>
+        <button class="primary-btn" id="updateBusStatusButton" type="button" onclick="updateDriverBusStatus()" style="margin-top:12px;">Update Bus Status</button>
+        <p id="driverStatusMessage" style="margin-top:10px;"></p>
+    </section>
+
+
+    <!-- GPS CONTROL -->
+
+    <section class="portal-section">
+
+        <h2>📍 Live Location</h2>
+
+        <p id="gpsStatus">
+            Location sharing is OFF
+        </p>
+
+        <label for="sharingDuration" style="display:block;margin-top:12px;">Live sharing duration</label>
+        <select id="sharingDuration" style="margin-top:6px;">
+            <option value="60">1 hour</option>
+            <option value="120">2 hours</option>
+            <option value="240" selected>4 hours</option>
+            <option value="480">8 hours</option>
+            <option value="0">Until I stop</option>
+        </select>
+
+        <button
+            id="startGpsButton"
+            onclick="startSharingLocation()">
+
+            ▶ Start Location Sharing
+
+        </button>
+
+        <button
+            id="stopGpsButton"
+            onclick="stopSharingLocation()"
+            style="display:none;">
+
+            ⏹ Stop Location Sharing
+
+        </button>
+
+    </section>
+
+
+    <!-- CURRENT LOCATION -->
+
+    <section class="portal-section">
+
+        <h2>📡 Current GPS</h2>
+
+        <p>
+            Latitude:
+            <strong id="driverLatitude">---</strong>
+        </p>
+
+        <p>
+            Longitude:
+            <strong id="driverLongitude">---</strong>
+        </p>
+
+        <p>
+            Last Updated:
+            <strong id="driverUpdated">---</strong>
+        </p>
+
+    </section>
+
+
+    <!-- INFORMATION -->
+
+    <section class="portal-section">
+
+        <h2>ℹ️ Driver Instructions</h2>
+
+        <ul>
+
+            <li>Select the bus you are currently driving.</li>
+
+            <li>Press <strong>Start Location Sharing</strong>.</li>
+
+            <li>Allow GPS/location permission.</li>
+
+            <li>Keep the phone with the driver during the trip.</li>
+
+            <li>Press Stop when the trip is finished.</li>
+
+        </ul>
+
+    </section>
+
+</main>
+
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+
+
+<script>
+
+// ==========================================
+// DRIVER GPS VARIABLES
+// ==========================================
+
+let driverWatchId = null;
+let sharingExpiresAt = null;
+
+async function loadDriverBuses() {
+    const select = document.getElementById("driverBusNumber");
+    try {
+        const response = await fetch("/api/driver/buses", {cache:"no-store"});
+        const data = await response.json();
+        select.innerHTML = '<option value="">Select bus</option>';
+        if (!data.success || !Array.isArray(data.buses) || !data.buses.length) {
+            select.innerHTML = '<option value="">No buses available</option>';
+            return;
+        }
+        data.buses.forEach(function(bus) {
+            const option = document.createElement("option");
+            option.value = bus.bus_number;
+            option.dataset.busId = bus.id;
+            option.textContent = `${bus.bus_number} - ${bus.route_name}`;
+            if (bus.assigned) option.selected = true;
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Unable to load buses:", error);
+        select.innerHTML = '<option value="">Unable to load buses</option>';
+    }
+}
+
+async function selectDriverBus() {
+    const select = document.getElementById("driverBusNumber");
+    const message = document.getElementById("busSelectionMessage");
+    const option = select.options[select.selectedIndex];
+    const busId = option && option.dataset ? option.dataset.busId : null;
+    if (!busId) {
+        message.textContent = "Please select a bus first.";
+        return;
+    }
+
+    // Never let an old watch continue sending GPS for the previous bus.
+    if (driverWatchId !== null) {
+        await stopSharingLocation();
+    }
+
+    message.textContent = "Selecting bus...";
+    try {
+        const response = await fetch("/api/driver/select-bus", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({bus_id: Number(busId)})
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+            message.textContent = `✅ ${data.bus_number} selected successfully. Now press Start Location Sharing.`;
+            document.getElementById("gpsStatus").textContent = "🔴 Location sharing is OFF";
+            document.getElementById("driverLatitude").textContent = "---";
+            document.getElementById("driverLongitude").textContent = "---";
+            document.getElementById("driverUpdated").textContent = "---";
+        } else {
+            message.textContent = data.message || "Unable to select bus.";
+        }
+    } catch (error) {
+        console.error(error);
+        message.textContent = "❌ Unable to connect to server.";
+    }
+}
+
+async function sendDriverLocation(position, busNumber) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    document.getElementById("driverLatitude").textContent = latitude.toFixed(6);
+    document.getElementById("driverLongitude").textContent = longitude.toFixed(6);
+    document.getElementById("gpsStatus").textContent = "🟢 Location sharing is ACTIVE";
+
+    try {
+        const response = await fetch("/api/location/update", {
+            method: "POST",
+            headers: {"Content-Type": "application/json", "Accept": "application/json"},
+            cache: "no-store",
+            body: JSON.stringify({
+                bus_number: busNumber,
+                latitude: latitude,
+                longitude: longitude,
+                bus_status: document.getElementById("driverBusStatus").value || "ON_ROUTE",
+                sharing_expires_at: sharingExpiresAt
+            })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            document.getElementById("gpsStatus").textContent = "⚠️ " + (data.message || "Location update rejected.");
+            return false;
+        }
+        document.getElementById("driverUpdated").textContent = data.updated_at || "---";
+        return true;
+    } catch (error) {
+        console.error("Location update failed:", error);
+        document.getElementById("gpsStatus").textContent = "⚠️ GPS received, but server update failed.";
+        return false;
+    }
+}
+
+function startSharingLocation() {
+    const busNumber = document.getElementById("driverBusNumber").value;
+    const status = document.getElementById("gpsStatus");
+    if (!busNumber) { alert("Please select a bus first."); return; }
+    if (!navigator.geolocation) { alert("GPS is not supported by this browser."); return; }
+
+    const minutes = Number(document.getElementById("sharingDuration").value || 0);
+    sharingExpiresAt = minutes > 0 ? new Date(Date.now() + minutes * 60000).toISOString() : null;
+    status.textContent = "📍 Getting your current GPS location...";
+
+    if (driverWatchId !== null) navigator.geolocation.clearWatch(driverWatchId);
+
+    const options = {enableHighAccuracy: true, maximumAge: 0, timeout: 15000};
+
+    // Send the first GPS point immediately instead of waiting for watchPosition.
+    navigator.geolocation.getCurrentPosition(async function(position) {
+        const ok = await sendDriverLocation(position, busNumber);
+        if (!ok) {
+            status.textContent = "⚠️ Server rejected the location. Check that this bus is selected.";
+            return;
+        }
+
+        driverWatchId = navigator.geolocation.watchPosition(
+            async function(pos) {
+                if (sharingExpiresAt && Date.now() >= new Date(sharingExpiresAt).getTime()) {
+                    await stopSharingLocation();
+                    return;
+                }
+                await sendDriverLocation(pos, busNumber);
+            },
+            function(error) {
+                console.error("GPS watch error:", error);
+                status.textContent = "⚠️ Live sharing started, but GPS update failed: " + (error.message || "unknown error");
+            },
+            options
+        );
+    }, function(error) {
+        console.error("GPS Error:", error);
+        sharingExpiresAt = null;
+        status.textContent = "❌ Unable to get GPS: " + (error.message || "Please allow location permission.");
+    }, options);
+
+    document.getElementById("startGpsButton").style.display = "none";
+    document.getElementById("stopGpsButton").style.display = "inline-block";
+}
+
+async function updateDriverBusStatus() {
+    const bus = document.getElementById("driverBusNumber").value;
+    const status = document.getElementById("driverBusStatus").value;
+    const message = document.getElementById("driverStatusMessage");
+    if (!bus) { alert("Please select a bus first."); return; }
+    message.textContent = "Updating bus status...";
+    try {
+        const response = await fetch("/api/location/status/" + encodeURIComponent(bus), {
+            method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"},
+            body:JSON.stringify({bus_status:status})
+        });
+        const data = await response.json();
+        message.textContent = response.ok && data.success ? "✅ Bus status updated: " + status.replaceAll("_"," ") : (data.message || "Unable to update status.");
+    } catch (error) { message.textContent = "❌ Unable to connect to server."; }
+}
+
+async function stopSharingLocation() {
+    if (driverWatchId !== null) {
+        navigator.geolocation.clearWatch(driverWatchId);
+        driverWatchId = null;
+    }
+    sharingExpiresAt = null;
+    document.getElementById("gpsStatus").textContent = "🔴 Location sharing is OFF";
+    document.getElementById("startGpsButton").style.display = "inline-block";
+    document.getElementById("stopGpsButton").style.display = "none";
+    const busNumber = document.getElementById("driverBusNumber").value;
+    if (busNumber) {
+        try { await fetch("/api/location/stop/" + encodeURIComponent(busNumber), {method:"POST"}); }
+        catch (error) { console.error("Unable to stop location on server:", error); }
+    }
+}
+
+// ==========================================
+// LOAD DRIVER PAGE
+// ==========================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadDriverBuses();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

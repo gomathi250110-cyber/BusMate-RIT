@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BusMate - Login</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #38bdf8
+    );
+
+    padding:25px;
+}
+
+
+/* =========================================================
+   MAIN LOGIN CARD
+   ========================================================= */
+
+.login-box{
+
+    width:950px;
+    max-width:100%;
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    background:white;
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.25);
+}
+
+
+/* =========================================================
+   LEFT SIDE
+   ========================================================= */
+
+.left{
+
+    background:linear-gradient(
+        145deg,
+        #1e40af,
+        #2563eb,
+        #0ea5e9
+    );
+
+    color:white;
+
+    padding:50px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+
+    position:relative;
+    overflow:hidden;
+}
+
+
+/* Decorative circles */
+
+.left::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:250px;
+    height:250px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.06);
+
+    top:-80px;
+    left:-80px;
+}
+
+.left::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.05);
+
+    bottom:-100px;
+    right:-80px;
+}
+
+
+.logo{
+
+    font-size:70px;
+
+    margin-bottom:10px;
+
+    position:relative;
+    z-index:1;
+}
+
+
+.left h1{
+
+    font-size:48px;
+
+    margin-bottom:8px;
+
+    position:relative;
+    z-index:1;
+}
+
+
+.left h3{
+
+    font-size:20px;
+
+    font-weight:normal;
+
+    margin-bottom:22px;
+
+    opacity:.95;
+
+    position:relative;
+    z-index:1;
+}
+
+
+.left p{
+
+    font-size:15px;
+
+    line-height:1.7;
+
+    max-width:400px;
+
+    opacity:.9;
+
+    position:relative;
+    z-index:1;
+}
+
+
+/* =========================================================
+   FEATURES
+   ========================================================= */
+
+.features{
+
+    margin-top:32px;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:16px;
+
+    position:relative;
+    z-index:1;
+}
+
+
+.feature{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    font-size:16px;
+}
+
+
+.feature-icon{
+
+    width:42px;
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.18);
+
+    border-radius:12px;
+
+    font-size:20px;
+
+    flex-shrink:0;
+}
+
+
+.feature-text{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:3px;
+}
+
+
+.feature-title{
+
+    font-weight:bold;
+}
+
+
+.feature-description{
+
+    font-size:12px;
+
+    opacity:.75;
+}
+
+
+/* =========================================================
+   RIGHT SIDE
+   ========================================================= */
+
+.right{
+
+    padding:50px;
+
+    background:white;
+}
+
+
+.right h2{
+
+    font-size:32px;
+
+    color:#0f172a;
+
+    margin-bottom:8px;
+}
+
+
+.sub{
+
+    color:#64748b;
+
+    margin-bottom:28px;
+
+    font-size:15px;
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.message{
+
+    display:none;
+
+    padding:12px 14px;
+
+    margin-bottom:18px;
+
+    border-radius:10px;
+
+    font-size:14px;
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+    border:1px solid #fecaca;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+label{
+
+    display:block;
+
+    font-weight:bold;
+
+    color:#334155;
+
+    margin:17px 0 7px;
+}
+
+
+input,
+select{
+
+    width:100%;
+
+    padding:14px 15px;
+
+    border:1px solid #cbd5e1;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    outline:none;
+
+    background:#f8fafc;
+
+    transition:.2s;
+}
+
+
+input:focus,
+select:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.12);
+
+    background:white;
+}
+
+
+select{
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+button{
+
+    width:100%;
+
+    padding:15px;
+
+    margin-top:25px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+
+button:hover{
+
+    transform:translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(37,99,235,.25);
+}
+
+
+button:disabled{
+
+    opacity:.7;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+    box-shadow:none;
+}
+
+
+/* =========================================================
+   SECURITY BOX
+   ========================================================= */
+
+.security{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-top:25px;
+
+    padding:15px;
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:10px;
+}
+
+
+.security-icon{
+
+    font-size:25px;
+}
+
+
+.security-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:3px;
+}
+
+
+.security-title{
+
+    color:#1d4ed8;
+
+    font-weight:bold;
+
+    font-size:14px;
+}
+
+
+.security-description{
+
+    color:#64748b;
+
+    font-size:12px;
+
+    line-height:1.4;
+}
+
+
+/* =========================================================
+   REGISTER
+   ========================================================= */
+
+.register{
+
+    text-align:center;
+
+    margin-top:25px;
+
+    padding-top:20px;
+
+    border-top:1px solid #e2e8f0;
+}
+
+
+.register p{
+
+    color:#64748b;
+
+    margin-bottom:12px;
+}
+
+
+.register a{
+
+    color:#2563eb;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    margin:0 7px;
+}
+
+
+.register a:hover{
+
+    text-decoration:underline;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer{
+
+    text-align:center;
+
+    margin-top:25px;
+
+    color:#94a3b8;
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:700px){
+
+    body{
+        padding:15px;
+    }
+
+    .login-box{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .left{
+
+        text-align:center;
+
+        padding:35px 25px;
+    }
+
+    .left h1{
+
+        font-size:38px;
+    }
+
+    .left h3{
+
+        font-size:17px;
+    }
+
+    .left p{
+
+        margin:auto;
+    }
+
+    .features{
+
+        text-align:left;
+
+        max-width:320px;
+
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .right{
+
+        padding:30px 25px;
+    }
+
+}
+
+
+
+/* Crisp RIT branding on the login page. */
+.login-box .left .login-branding{
+    width:min(470px,100%);
+    height:auto;
+    margin:0 0 22px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+    background:none!important;
+    position:relative;
+    z-index:1;
+}
+.login-box .left .login-branding img{
+    display:block;
+    width:min(440px,100%);
+    height:auto;
+    max-height:105px;
+    object-fit:contain;
+    object-position:left center;
+    image-rendering:auto;
+}
+.login-box .left .institute-name{
+    display:flex;
+    flex-direction:column;
+    gap:1px;
+    color:#fff;
+    line-height:1.08;
+    letter-spacing:1.5px;
+    font-weight:800;
+    text-shadow:0 1px 2px rgba(0,0,0,.18);
+}
+.login-box .left .institute-name span:first-child{font-size:20px;}
+.login-box .left .institute-name span:last-child{font-size:14px;letter-spacing:1.8px;font-weight:600;}
+@media (max-width:650px){
+    .login-box .left .login-branding{align-items:center;}
+    .login-box .left .login-branding img{width:min(390px,100%);}
+    .login-box .left .institute-name{text-align:center;}
+}
+</style>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}">
+</head>
+
+
+<body>
+
+
+<div class="login-box">
+
+
+    <!-- =====================================================
+         LEFT SIDE
+         ===================================================== -->
+
+    <div class="left">
+
+        <div class="logo login-branding">
+            <img src="{{ url_for('static', filename='rit-mark.png') }}" alt="RIT - Rajalakshmi Institute of Technology">
+            <div class="institute-name" aria-label="Rajalakshmi Institute of Technology">
+                <span>RAJALAKSHMI</span>
+                <span>INSTITUTE OF TECHNOLOGY</span>
+            </div>
+        </div>
+
+        <h1>
+            BusMate
+        </h1>
+
+        <h3>
+            RIT Transport Management System
+        </h3>
+
+        <p>
+            Smart campus transportation management
+            for students, faculty, drivers and administrators.
+        </p>
+
+
+        <!-- FEATURES -->
+
+        <div class="features">
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🚌
+                </div>
+
+                <div class="feature-text">
+
+                    <div class="feature-title">
+                        Bus Routes
+                    </div>
+
+                    <div class="feature-description">
+                        View all available bus routes
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📍
+                </div>
+
+                <div class="feature-text">
+
+                    <div class="feature-title">
+                        Boarding Points
+                    </div>
+
+                    <div class="feature-description">
+                        Find your boarding locations
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📡
+                </div>
+
+                <div class="feature-text">
+
+                    <div class="feature-title">
+                        Live Bus Tracking
+                    </div>
+
+                    <div class="feature-description">
+                        Track buses in real-time
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🔄
+                </div>
+
+                <div class="feature-text">
+
+                    <div class="feature-title">
+                        Return & Exam Buses
+                    </div>
+
+                    <div class="feature-description">
+                        Check return and exam timings
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RIGHT SIDE
+         ===================================================== -->
+
+    <div class="right">
+
+
+        <h2>
+            Welcome Back 👋
+        </h2>
+
+        <p class="sub">
+            Login to your BusMate portal
+        </p>
+
+
+        <!-- ERROR / SUCCESS MESSAGE -->
+
+        <div id="message" class="message"></div>
+
+
+        <!-- LOGIN FORM -->
+
+        <form id="loginForm">
+
+
+            <label id="firstLabel">
+                Username / ID / Phone
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter username, ID or phone"
+                required
+            >
+
+
+            <label id="secondLabel">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter password"
+                required
+            >
+
+
+            <label>
+                Login As
+            </label>
+
+            <select
+                id="role"
+                name="role"
+                required
+            >
+
+                <option value="">
+                    Select Portal
+                </option>
+
+                <option value="driver">
+                    🚌 Driver Portal
+                </option>
+
+                <option value="admin">
+                    🛠️ Admin Portal
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                id="loginButton"
+            >
+                🔐 Login
+            </button>
+
+
+        </form>
+
+
+
+        <!-- SECURITY -->
+
+        <div class="security">
+
+            <div class="security-icon">
+                🛡️
+            </div>
+
+            <div class="security-text">
+
+                <div class="security-title">
+                    Secure & Reliable
+                </div>
+
+                <div class="security-description">
+                    Your data is safe with us.
+                    We ensure secure and reliable
+                    transport management.
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- REGISTER -->
+
+        <div class="register">
+
+            <p>
+                Don't have an account?
+            </p>
+
+            <a href="/student/register">
+                🎓 Student
+            </a>
+
+            <a href="/faculty/register">
+                👨‍🏫 Faculty
+            </a>
+
+            <a href="/driver/register">
+                🚌 Driver
+            </a>
+
+        </div>
+
+
+
+        <div class="footer">
+
+            © 2026 BusMate ·
+            RIT Transport Management System
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   BUSMATE LOGIN
+   ========================================================= */
+
+const loginForm = document.getElementById("loginForm");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const roleInput = document.getElementById("role");
+const loginButton = document.getElementById("loginButton");
+const messageBox = document.getElementById("message");
+const firstLabel = document.getElementById("firstLabel");
+const secondLabel = document.getElementById("secondLabel");
+
+function showMessage(message){
+    messageBox.textContent = message;
+    messageBox.style.display = "block";
+}
+
+function hideMessage(){
+    messageBox.textContent = "";
+    messageBox.style.display = "none";
+}
+
+function updateLoginFields(){
+    if(roleInput.value === "driver"){
+        firstLabel.textContent = "Driver Name";
+        secondLabel.textContent = "Phone Number";
+        usernameInput.type = "text";
+        usernameInput.placeholder = "Enter driver name";
+        passwordInput.type = "tel";
+        passwordInput.placeholder = "Enter phone number";
+    } else {
+        firstLabel.textContent = "Username";
+        secondLabel.textContent = "Password";
+        usernameInput.type = "text";
+        usernameInput.placeholder = "Enter admin username";
+        passwordInput.type = "password";
+        passwordInput.placeholder = "Enter admin password";
+    }
+}
+
+roleInput.addEventListener("change", updateLoginFields);
+updateLoginFields();
+
+loginForm.addEventListener("submit", async function(event){
+    event.preventDefault();
+    hideMessage();
+
+    const firstValue = usernameInput.value.trim();
+    const secondValue = passwordInput.value.trim();
+    const role = roleInput.value;
+
+    if(!firstValue || !secondValue || !role){
+        showMessage("Please enter all login details.");
+        return;
+    }
+
+    let loginUrl = "";
+    const formData = new URLSearchParams();
+
+    if(role === "driver"){
+        loginUrl = "/driver/login";
+        formData.append("driver_name", firstValue);
+        formData.append("phone", secondValue);
+    } else if(role === "admin"){
+        loginUrl = "/admin/login";
+        formData.append("username", firstValue);
+        formData.append("password", secondValue);
+    }
+
+    loginButton.disabled = true;
+    loginButton.textContent = "⏳ Logging in...";
+
+    try{
+        const response = await fetch(loginUrl, {
+            method:"POST",
+            headers:{"Content-Type":"application/x-www-form-urlencoded"},
+            body:formData.toString(),
+            credentials:"same-origin"
+        });
+
+        const data = await response.json();
+        if(response.ok && data.success){
+            loginButton.textContent = "✅ Login Successful";
+            window.location.href = data.redirect;
+            return;
+        }
+        showMessage(data.message || "Invalid login details.");
+    }catch(error){
+        console.error("Login error:", error);
+        showMessage("Unable to connect to the server. Make sure Flask app.py is running.");
+    }
+
+    loginButton.disabled = false;
+    loginButton.textContent = "🔐 Login";
+});
+</script>
+
+
+</body>
+</html>

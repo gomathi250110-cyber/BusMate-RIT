@@ -1,0 +1,524 @@
+/* BusMate modern visual layer - presentation only.
+   Existing HTML IDs, routes, forms and JavaScript are intentionally untouched. */
+:root{
+  --bm-navy:#082d5c;
+  --bm-blue:#0b6ff5;
+  --bm-cyan:#13a8d8;
+  --bm-ink:#10233f;
+  --bm-muted:#66758a;
+  --bm-bg:#f4f8fc;
+  --bm-card:#ffffff;
+  --bm-line:#e4edf7;
+  --bm-shadow:0 12px 34px rgba(20,54,92,.10);
+  --bm-radius:18px;
+}
+
+html,body{font-family:Inter,Segoe UI,Roboto,Arial,sans-serif!important;background:var(--bm-bg)!important;color:var(--bm-ink)!important}
+body{min-height:100vh}
+
+/* Shared header */
+.topbar{
+  background:linear-gradient(110deg,var(--bm-navy),#0b4f91 58%,#0b6ff5)!important;
+  min-height:86px!important;
+  padding:14px 28px!important;
+  border-bottom:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:0 8px 25px rgba(4,35,74,.16)!important;
+  position:relative!important;
+  overflow:hidden!important;
+}
+.topbar:after{content:"";position:absolute;right:-80px;top:-110px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
+.topbar h1{font-weight:800!important;letter-spacing:-.5px!important}
+.topbar p{opacity:.82!important}
+.topbar a,.nav-btn{transition:.2s ease!important}
+.logout-btn{border-radius:12px!important;background:#fff!important;color:var(--bm-navy)!important;padding:10px 16px!important;box-shadow:0 5px 14px rgba(0,0,0,.12)!important}
+.logout-btn:hover{transform:translateY(-1px)!important;background:#f0f7ff!important}
+.nav-btn{background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.18)!important}
+
+/* Main portal surfaces */
+.container,.main,.page-container{width:min(1180px,94%)!important;max-width:1180px!important;margin:28px auto 55px!important;padding:0!important}
+.welcome-card,.welcome,.portal-section,.section,.search-card,.routes-card,.card{
+  background:var(--bm-card)!important;border:1px solid var(--bm-line)!important;border-radius:var(--bm-radius)!important;box-shadow:var(--bm-shadow)!important;
+}
+.welcome-card,.welcome{padding:25px 28px!important;margin-bottom:20px!important;border-left:4px solid var(--bm-blue)!important}
+.welcome-card h2,.welcome h2,.page-heading h2{color:var(--bm-navy)!important;font-weight:800!important}
+.welcome-card p,.welcome p,.page-heading p{color:var(--bm-muted)!important}
+
+/* Student/faculty portal cards */
+.portal-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
+.portal-box{border:1px solid var(--bm-line)!important;border-radius:18px!important;box-shadow:0 8px 25px rgba(20,54,92,.07)!important;transition:transform .2s,box-shadow .2s!important}
+.portal-box:hover{transform:translateY(-3px)!important;box-shadow:0 16px 34px rgba(20,54,92,.12)!important}
+.portal-box summary{min-height:145px!important;padding:24px!important;background:linear-gradient(180deg,#fff,#f8fbff)!important}
+.portal-box summary:hover{background:#f4f9ff!important}
+.portal-box[open] summary{background:linear-gradient(135deg,#eaf4ff,#f8fcff)!important;border-bottom:1px solid #d9e9fa!important}
+.box-icon{width:52px!important;height:52px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:15px!important;background:#eaf3ff!important;color:var(--bm-blue)!important;font-size:27px!important;margin-bottom:12px!important}
+.box-title{color:var(--bm-navy)!important;font-weight:800!important}
+.box-subtitle{color:var(--bm-muted)!important}
+.box-content{padding:24px!important}
+
+/* Admin dashboard */
+.menu-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important}
+.menu-grid .menu-card{padding:22px!important;min-height:150px!important;border:1px solid var(--bm-line)!important;border-radius:18px!important;box-shadow:0 8px 25px rgba(20,54,92,.07)!important;background:linear-gradient(180deg,#fff,#fbfdff)!important}
+.menu-grid .menu-card:hover{transform:translateY(-4px)!important;border-color:#b9d8fb!important;box-shadow:0 16px 34px rgba(20,54,92,.12)!important}
+.menu-icon{width:50px!important;height:50px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:15px!important;background:#eaf3ff!important;font-size:25px!important}
+.menu-card h3{color:var(--bm-navy)!important;font-weight:800!important}
+.menu-card p{color:var(--bm-muted)!important}
+.section{padding:25px!important}
+.section-header{padding-bottom:15px!important;border-bottom:1px solid var(--bm-line)!important}
+.section-header h2{color:var(--bm-navy)!important;font-weight:800!important}
+
+/* Forms / buttons */
+input,select,textarea{border:1px solid #d5e1ee!important;border-radius:11px!important;background:#fbfdff!important;transition:.18s ease!important}
+input:focus,select:focus,textarea:focus{border-color:var(--bm-blue)!important;box-shadow:0 0 0 4px rgba(11,111,245,.10)!important;background:#fff!important}
+button,.btn-primary,.btn-success,.btn-danger,.btn-secondary,.btn-warning,.btn-light,.primary-btn{
+  border-radius:11px!important;font-weight:700!important;transition:transform .18s,box-shadow .18s,filter .18s!important
+}
+button:hover,.btn-primary:hover,.btn-success:hover,.btn-danger:hover,.btn-secondary:hover,.btn-warning:hover,.btn-light:hover,.primary-btn:hover{transform:translateY(-1px)!important;box-shadow:0 7px 16px rgba(20,54,92,.12)!important}
+.btn-primary,.primary-btn,button:not(.btn-danger):not(.btn-success):not(.btn-warning):not(.btn-secondary):not(.btn-light){background:linear-gradient(135deg,#0b6ff5,#095bd0)!important}
+.btn-success{background:linear-gradient(135deg,#16a66a,#0f8c58)!important}
+.btn-danger{background:linear-gradient(135deg,#ef4b57,#d93643)!important}
+.btn-warning{background:linear-gradient(135deg,#f3a329,#e1830c)!important}
+
+/* Tables / route cards */
+table{border-collapse:separate!important;border-spacing:0!important;overflow:hidden!important;border:1px solid var(--bm-line)!important;border-radius:12px!important}
+th{background:#edf5ff!important;color:var(--bm-navy)!important;border-bottom:1px solid #d7e6f7!important}
+td{border-bottom:1px solid #edf2f7!important}
+tr:last-child td{border-bottom:0!important}
+.admin-route-card,.admin-notice-card,.route-card,.search-result{border:1px solid var(--bm-line)!important;border-radius:15px!important;background:#fbfdff!important;box-shadow:0 5px 18px rgba(20,54,92,.05)!important}
+.badge-blue{background:#e5f1ff!important;color:#075fce!important}
+
+/* Live map */
+#map,.map-container,.leaflet-container{border-radius:16px!important;overflow:hidden!important}
+.status{border-radius:999px!important}
+
+/* Login */
+.login-box{border-radius:24px!important;box-shadow:0 28px 70px rgba(4,35,74,.24)!important;border:1px solid rgba(255,255,255,.4)!important}
+.login-page{background:radial-gradient(circle at 15% 20%,#3aa8e9 0,#0a63c9 38%,#062b58 100%)!important}
+.login-card{border-radius:22px!important;box-shadow:0 25px 60px rgba(4,35,74,.18)!important}
+
+/* Login page (main) */
+.login-box .left{background:linear-gradient(145deg,#062b58,#075aa8 58%,#13a8d8)!important}
+.login-box .left .logo{font-size:0!important;width:min(390px,100%);height:88px;background:url('/static/rit-logo.png') center/contain no-repeat;margin-bottom:18px!important}
+.login-box .right{background:#fff!important}
+.login-box .right h2{color:var(--bm-navy)!important;font-weight:800!important}
+.login-box .right input,.login-box .right select{border-radius:12px!important;padding:13px 14px!important}
+.login-box .right button{border-radius:12px!important;background:linear-gradient(135deg,#0b6ff5,#095bd0)!important}
+
+/* Admin login */
+.login-card .logo{font-size:0!important;width:220px;height:54px;margin:0 auto 18px!important;background:url('/static/rit-logo.png') center/contain no-repeat}
+
+/* Pages */
+.page-heading{text-align:left!important;background:transparent!important}
+.search-card,.routes-card{padding:24px!important}
+.search-row{display:flex!important;gap:12px!important}
+.routes-grid{gap:16px!important}
+
+/* Driver */
+.driver-card{background:#fff}
+
+@media (max-width:900px){
+  .menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .portal-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media (max-width:650px){
+  .topbar{padding:14px 17px!important;min-height:76px!important}
+  .container,.main,.page-container{width:92%!important;margin-top:18px!important}
+  .menu-grid,.portal-grid{grid-template-columns:1fr!important}
+  .portal-box[open]{grid-column:auto!important}
+  .search-row{flex-direction:column!important}
+  .login-box{grid-template-columns:1fr!important}
+  .login-box .left{padding:35px 28px!important;min-height:330px}
+  .login-box .right{padding:30px 24px!important}
+}
+
+/* =========================================================
+   RIT BRANDED PORTAL HEADER - UI ONLY
+   Keeps all existing links, buttons and JS behavior intact.
+========================================================= */
+.topbar,
+.dashboard .topbar{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:24px!important;
+  padding:12px 30px!important;
+  min-height:92px!important;
+}
+.portal-brand{
+  display:flex!important;
+  align-items:center!important;
+  gap:14px!important;
+  min-width:0!important;
+}
+.portal-logo-wrap{
+  flex:0 0 auto!important;
+  width:180px!important;
+  height:60px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#fff!important;
+  border-radius:12px!important;
+  padding:6px 10px!important;
+  box-shadow:0 5px 16px rgba(0,0,0,.14)!important;
+}
+.portal-logo{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+}
+.portal-brand-text h1{
+  margin:0!important;
+  color:#fff!important;
+  font-size:25px!important;
+  line-height:1.05!important;
+  letter-spacing:.5px!important;
+  font-weight:900!important;
+}
+.portal-brand-text p,
+.portal-brand-text span{
+  display:block!important;
+  margin:5px 0 0!important;
+  color:rgba(255,255,255,.82)!important;
+  font-size:13px!important;
+  font-weight:600!important;
+}
+.portal-actions{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:12px!important;
+  flex:0 0 auto!important;
+  margin-left:auto!important;
+  padding-left:16px!important;
+}
+.role-chip{
+  display:inline-flex!important;
+  align-items:center!important;
+  min-height:42px!important;
+  padding:0 14px!important;
+  border-radius:12px!important;
+  color:#fff!important;
+  background:rgba(255,255,255,.12)!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  font-size:13px!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+}
+.topbar .logout-btn,
+.dashboard .topbar .logout-btn{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:104px!important;
+  min-height:42px!important;
+  margin:0!important;
+  padding:9px 16px!important;
+  white-space:nowrap!important;
+  position:relative!important;
+  z-index:2!important;
+}
+.dashboard .topbar-right{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:12px!important;
+  margin-left:auto!important;
+}
+
+/* More attractive portal boxes without changing their content or behavior */
+.portal-grid{
+  align-items:start!important;
+  gap:20px!important;
+}
+.portal-box{
+  position:relative!important;
+  overflow:hidden!important;
+  background:linear-gradient(145deg,#ffffff 0%,#f7fbff 100%)!important;
+  border:1px solid #dce9f6!important;
+  box-shadow:0 10px 28px rgba(8,45,92,.08)!important;
+}
+.portal-box:before{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  top:0!important;
+  height:4px!important;
+  background:linear-gradient(90deg,#0b6ff5,#13a8d8)!important;
+}
+.portal-box summary{
+  position:relative!important;
+  min-height:155px!important;
+  padding:25px!important;
+  cursor:pointer!important;
+}
+.portal-box summary::-webkit-details-marker{color:#0b6ff5!important}
+.portal-box:hover{
+  transform:translateY(-5px)!important;
+  border-color:#b8d7f5!important;
+  box-shadow:0 18px 38px rgba(8,45,92,.14)!important;
+}
+.portal-box .box-icon{
+  width:58px!important;
+  height:58px!important;
+  border-radius:17px!important;
+  background:linear-gradient(135deg,#e8f3ff,#d8edff)!important;
+  box-shadow:inset 0 0 0 1px #cfe5fb!important;
+}
+.portal-box:hover .box-icon{
+  transform:scale(1.04)!important;
+}
+.portal-box .box-title{font-size:17px!important}
+.portal-box .box-subtitle{font-size:13px!important;line-height:1.45!important}
+.portal-box .box-content{
+  background:#fff!important;
+  border-top:1px solid #e6eef7!important;
+}
+.welcome-card,.welcome{
+  position:relative!important;
+  overflow:hidden!important;
+  background:linear-gradient(135deg,#ffffff 0%,#f2f8ff 100%)!important;
+}
+.welcome-card:after,.welcome:after{
+  content:""!important;
+  position:absolute!important;
+  width:170px!important;
+  height:170px!important;
+  right:-65px!important;
+  top:-70px!important;
+  border-radius:50%!important;
+  background:rgba(11,111,245,.07)!important;
+  pointer-events:none!important;
+}
+
+/* Driver information/control cards */
+.driver-card,.portal-section{
+  border-radius:18px!important;
+  border:1px solid #dce9f6!important;
+  box-shadow:0 10px 28px rgba(8,45,92,.08)!important;
+  background:linear-gradient(145deg,#fff,#f8fbff)!important;
+}
+.portal-section:hover{
+  border-color:#b8d7f5!important;
+  box-shadow:0 15px 32px rgba(8,45,92,.11)!important;
+}
+
+@media (max-width:800px){
+  .topbar,.dashboard .topbar{padding:12px 16px!important;gap:12px!important;min-height:82px!important}
+  .portal-logo-wrap{width:132px!important;height:50px!important}
+  .portal-brand-text h1{font-size:19px!important}
+  .portal-brand-text p,.portal-brand-text span{font-size:11px!important}
+  .role-chip{display:none!important}
+  .portal-actions{padding-left:4px!important}
+  .topbar .logout-btn,.dashboard .topbar .logout-btn{min-width:92px!important;padding:8px 12px!important}
+}
+@media (max-width:550px){
+  .topbar,.dashboard .topbar{align-items:center!important}
+  .portal-logo-wrap{width:108px!important;height:44px!important;padding:5px 7px!important}
+  .portal-brand{gap:8px!important}
+  .portal-brand-text h1{font-size:16px!important;letter-spacing:.2px!important}
+  .portal-brand-text p,.portal-brand-text span{font-size:9px!important;margin-top:2px!important}
+  .topbar .logout-btn,.dashboard .topbar .logout-btn{min-width:82px!important;font-size:12px!important}
+  .portal-box summary{min-height:135px!important;padding:19px!important}
+}
+
+
+/* Final Student/Faculty box behavior: expand inside the same card/grid cell. */
+.portal-grid .portal-box,
+.portal-grid .portal-box.portal-box-open,
+.portal-grid .portal-box[open]{
+  grid-column:auto!important;
+  width:auto!important;
+  max-width:none!important;
+  position:relative!important;
+  z-index:1!important;
+  transform:none!important;
+}
+.portal-grid .portal-box .box-content,
+.portal-grid .portal-box.portal-box-open .box-content,
+.portal-grid .portal-box[open] .box-content{
+  position:static!important;
+  inset:auto!important;
+  width:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  overflow:visible!important;
+  display:block!important;
+  box-sizing:border-box!important;
+  background:#fff!important;
+  border-top:1px solid #e6eef7!important;
+  border-radius:0 0 18px 18px!important;
+  box-shadow:none!important;
+}
+.portal-grid .portal-box.portal-box-open summary,
+.portal-grid .portal-box[open] summary{
+  cursor:pointer!important;
+}
+.portal-grid .portal-box.portal-box-open:hover,
+.portal-grid .portal-box[open]:hover{
+  transform:none!important;
+}
+
+/* Keep the header clean: always reserve space between branding and Logout. */
+@media (min-width:901px){
+  .topbar .topbar-content,
+  .dashboard .topbar .topbar-content{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:28px!important;
+  }
+}
+@media (max-width:900px){
+  .topbar .topbar-content,
+  .dashboard .topbar .topbar-content{
+    flex-wrap:wrap!important;
+    row-gap:10px!important;
+  }
+  .portal-brand{flex:1 1 auto!important;min-width:0!important;}
+  .portal-actions{flex:0 0 auto!important;margin-left:auto!important;}
+}
+@media (max-width:650px){
+  .topbar .topbar-content,
+  .dashboard .topbar .topbar-content{
+    flex-wrap:nowrap!important;
+    gap:10px!important;
+  }
+  .portal-logo-wrap{width:96px!important;height:42px!important;padding:4px 6px!important;}
+  .portal-brand{gap:8px!important;}
+  .portal-brand-text{min-width:0!important;}
+  .portal-brand-text h1{font-size:15px!important;white-space:nowrap!important;}
+  .portal-brand-text p{font-size:9px!important;white-space:nowrap!important;}
+  .portal-actions{gap:7px!important;padding-left:6px!important;}
+  .role-chip{display:none!important;}
+  .topbar .logout-btn,.dashboard .topbar .logout-btn{
+    min-width:78px!important;
+    min-height:38px!important;
+    padding:7px 10px!important;
+    font-size:12px!important;
+  }
+}
+
+/* Final login branding: no rasterized institute-name text; render the name as HTML for crisp letters. */
+.login-box .left .login-branding{
+  width:min(470px,100%)!important;
+  height:auto!important;
+  margin:0 0 22px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  gap:10px!important;
+  background:none!important;
+  font-size:initial!important;
+}
+.login-box .left .login-branding img{
+  display:block!important;
+  width:min(300px,100%)!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:left center!important;
+  image-rendering:auto!important;
+}
+.login-box .left .login-branding .institute-name{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:2px!important;
+  color:#fff!important;
+  line-height:1.08!important;
+  letter-spacing:1.4px!important;
+  font-weight:800!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.18)!important;
+}
+.login-box .left .login-branding .institute-name span:first-child{font-size:23px!important;}
+.login-box .left .login-branding .institute-name span:last-child{font-size:15px!important;letter-spacing:1.8px!important;font-weight:650!important;}
+@media (max-width:650px){
+  .login-box .left .login-branding{align-items:center!important;}
+  .login-box .left .login-branding img{width:min(250px,100%)!important;}
+  .login-box .left .login-branding .institute-name{text-align:center!important;}
+}
+
+
+/* =========================================================
+   FINAL STUDENT/FACULTY LAYOUT
+   Match the Admin dashboard: four cards across on desktop.
+   When a card is opened, it expands across the full row in
+   the same page (no popup/modal), and another card can be opened.
+   ========================================================= */
+.portal-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:20px!important;
+  align-items:start!important;
+}
+.portal-grid .portal-box{
+  grid-column:auto!important;
+  width:100%!important;
+  min-width:0!important;
+  align-self:start!important;
+  transform:none!important;
+}
+.portal-grid .portal-box[open]{
+  grid-column:1 / -1!important;
+  width:100%!important;
+  transform:none!important;
+  z-index:1!important;
+}
+.portal-grid .portal-box[open] .box-content{
+  position:static!important;
+  width:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  overflow:visible!important;
+  display:block!important;
+  box-sizing:border-box!important;
+}
+.portal-grid .portal-box summary{
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+
+@media (max-width:1100px){
+  .portal-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+}
+@media (max-width:900px){
+  .portal-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+@media (max-width:650px){
+  .portal-grid{grid-template-columns:1fr!important;}
+  .portal-grid .portal-box[open]{grid-column:1!important;}
+}
+
+/* Crisp login branding: the institute name is real HTML text, not
+   the tiny text embedded in the raster logo. */
+.login-box .left .login-branding img{
+  width:240px!important;
+  height:auto!important;
+  max-height:100px!important;
+  object-fit:contain!important;
+  object-position:left center!important;
+  image-rendering:auto!important;
+}
+.login-box .left .login-branding .institute-name{
+  color:#fff!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-weight:800!important;
+  letter-spacing:1.2px!important;
+  line-height:1.08!important;
+  text-shadow:none!important;
+}
+.login-box .left .login-branding .institute-name span:first-child{
+  font-size:25px!important;
+  font-weight:900!important;
+}
+.login-box .left .login-branding .institute-name span:last-child{
+  font-size:17px!important;
+  font-weight:800!important;
+  letter-spacing:1.5px!important;
+}
+@media (max-width:650px){
+  .login-box .left .login-branding img{width:210px!important;}
+  .login-box .left .login-branding .institute-name span:first-child{font-size:22px!important;}
+  .login-box .left .login-branding .institute-name span:last-child{font-size:14px!important;}
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BusMate - Driver Registration</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(135deg,#eaf5ff 0%,#f7fbff 50%,#dceeff 100%);color:#10233f}
+.driver-register-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+.driver-register-card{width:min(1000px,100%);display:grid;grid-template-columns:38% 62%;background:#fff;border-radius:26px;overflow:hidden;box-shadow:0 25px 65px rgba(8,45,92,.18);border:1px solid rgba(255,255,255,.8)}
+.driver-brand{position:relative;padding:42px 34px;color:#fff;background:linear-gradient(150deg,#062b58 0%,#075aa8 58%,#13a8d8 100%);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;min-height:650px}
+.driver-brand:before{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.08);top:-110px;right:-120px}
+.driver-brand:after{content:"";position:absolute;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,.07);bottom:-130px;left:-110px}
+.brand-content,.brand-features{position:relative;z-index:1}
+.brand-logo{width:190px;height:58px;object-fit:contain;object-position:left center;background:#fff;border-radius:12px;padding:7px 12px;margin-bottom:30px}
+.bus-icon{font-size:64px;line-height:1;margin-bottom:15px}
+.driver-brand h1{font-size:35px;line-height:1.08;margin:0 0 12px;font-weight:900;letter-spacing:-.6px}
+.driver-brand .tagline{font-size:16px;line-height:1.6;opacity:.9;max-width:310px}
+.brand-features{display:flex;flex-direction:column;gap:14px;margin-top:35px}
+.brand-feature{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:700}
+.brand-feature span:first-child{width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:11px;background:rgba(255,255,255,.16);font-size:18px;flex-shrink:0}
+.register-panel{padding:42px 48px;background:#fff}
+.register-heading{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.register-heading-icon{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:#e9f3ff;font-size:27px}
+.register-panel h2{margin:0;color:#082d5c;font-size:30px;font-weight:900}
+.register-panel .sub{margin:0 0 26px;color:#66758a;font-size:14px}
+#message{display:none;padding:12px 14px;border-radius:12px;margin-bottom:18px;font-size:14px;background:#eff8ff;color:#075fce;border:1px solid #cfe6ff}
+.driver-form{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.form-field{margin-bottom:17px}
+.form-field.full{grid-column:1/-1}
+.form-field label{display:block;margin:0 0 7px;color:#244261;font-size:13px;font-weight:800}
+.field-wrap{position:relative}
+.field-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;z-index:1}
+.form-field input,.form-field select{width:100%;height:48px;padding:0 13px 0 42px;border:1px solid #d5e3f1;border-radius:12px;background:#f9fcff;color:#18324f;font-size:14px;outline:none;transition:.2s}
+.form-field select{padding-left:42px;cursor:pointer}
+.form-field input:focus,.form-field select:focus{border-color:#0b6ff5;box-shadow:0 0 0 4px rgba(11,111,245,.1);background:#fff}
+.register-btn{width:100%;height:50px;margin-top:7px;border:0;border-radius:12px;background:linear-gradient(135deg,#0b6ff5,#095bd0);color:#fff;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 9px 20px rgba(11,111,245,.2);transition:.2s}
+.register-btn:hover{transform:translateY(-1px);box-shadow:0 12px 24px rgba(11,111,245,.27)}
+.register-btn:disabled{opacity:.7;cursor:not-allowed;transform:none}
+.back-login{margin-top:20px;text-align:center;font-size:14px;color:#66758a}
+.back-login a{color:#0b6ff5;text-decoration:none;font-weight:800}
+.back-login a:hover{text-decoration:underline}
+.helper{margin-top:13px;text-align:center;font-size:12px;color:#7a899b;line-height:1.5}
+@media(max-width:760px){.driver-register-page{padding:15px}.driver-register-card{grid-template-columns:1fr}.driver-brand{min-height:330px;padding:30px}.driver-brand h1{font-size:29px}.brand-features{margin-top:22px;display:grid;grid-template-columns:1fr 1fr}.register-panel{padding:30px 24px}.driver-form{grid-template-columns:1fr}.form-field.full{grid-column:auto}}
+@media(max-width:430px){.brand-features{grid-template-columns:1fr}.driver-brand{min-height:390px}}
+</style>
+</head>
+<body>
+<div class="driver-register-page">
+  <div class="driver-register-card">
+    <section class="driver-brand">
+      <div class="brand-content">
+        <img class="brand-logo" src="{{ url_for('static', filename='rit-logo.png') }}" alt="RIT">
+        <div class="bus-icon">🚌</div>
+        <h1>Welcome to BusMate</h1>
+        <p class="tagline">Join the RIT transport team and manage your bus live location securely.</p>
+      </div>
+      <div class="brand-features">
+        <div class="brand-feature"><span>📍</span><div>Live Location Sharing</div></div>
+        <div class="brand-feature"><span>🔐</span><div>Secure Driver Account</div></div>
+        <div class="brand-feature"><span>🚌</span><div>Choose Bus Inside Driver Portal</div></div>
+      </div>
+    </section>
+
+    <section class="register-panel">
+      <div class="register-heading">
+        <div class="register-heading-icon">👨‍✈️</div>
+        <div><h2>Driver Registration</h2><p class="sub">Create your individual BusMate driver account.</p></div>
+      </div>
+
+      <div id="message"></div>
+
+      <form id="driverRegisterForm" class="driver-form">
+        <div class="form-field">
+          <label for="name">Driver Name</label>
+          <div class="field-wrap"><span class="field-icon">👤</span><input type="text" name="name" id="name" placeholder="Enter your full name" required></div>
+        </div>
+        <div class="form-field">
+          <label for="phone">Phone Number</label>
+          <div class="field-wrap"><span class="field-icon">📱</span><input type="tel" name="phone" id="phone" placeholder="Enter your phone number" required></div>
+        </div>
+        <div class="form-field full">
+          <button type="submit" id="registerButton" class="register-btn">📝 Create Driver Account</button>
+        </div>
+      </form>
+
+      <div class="back-login">Already have an account? <a href="/">Login here</a></div>
+      <div class="helper">After registration, login with your driver name and phone number. Select your bus inside the Driver Portal.</div>
+    </section>
+  </div>
+</div>
+<script>
+const form=document.getElementById('driverRegisterForm');
+const message=document.getElementById('message');
+
+function showMessage(text, success=false){
+  message.textContent=text;
+  message.style.display='block';
+  message.style.background=success?'#ecfdf5':'#eff8ff';
+  message.style.color=success?'#047857':'#075fce';
+  message.style.borderColor=success?'#b7efd8':'#cfe6ff';
+}
+
+form.addEventListener('submit',async(e)=>{
+ e.preventDefault();
+ const button=document.getElementById('registerButton');
+ button.disabled=true;
+ button.textContent='⏳ Creating account...';
+ showMessage('Creating your driver account...');
+ const fd=new FormData(form);
+ try{
+  const r=await fetch('/driver/register',{method:'POST',body:fd});
+  const d=await r.json();
+  showMessage(d.message||'Registration completed.',!!(r.ok&&d.success));
+  if(r.ok&&d.success){setTimeout(()=>window.location.href='/',1000);}
+ }catch(err){showMessage('Unable to connect to server.');}
+ button.disabled=false;
+ button.textContent='📝 Create Driver Account';
+});
+</script>
+</body>
+</html>
